@@ -9,7 +9,6 @@ export const defaultScreenOptions = {
     headerTintColor: theme.colors.white,
     headerTitle: (data: any) => {
         let title = i18n.t(`${data.children}.HeaderTitle`);
-        console.log (`${data.children}.HeaderTitle`);
         if (title === `${data.children}.HeaderTitle`) {
             title = data.children;
         }

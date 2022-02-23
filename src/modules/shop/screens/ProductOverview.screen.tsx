@@ -1,21 +1,22 @@
 import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import { ShopRoutes, ShopStackType } from '~routes/navigator/ShopNavigator.route.types';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
 import { ProductListItemComponent } from '../components/ProductListItem.component';
-import { ProductModel } from '../store/model/product.model';
+import { BasicProduct, ProductModel } from '../store/model/product.model';
 import { getProducts } from '../store/products.selectors';
 
-interface ProductOverviewInput extends NativeStackScreenProps<any> { } 
+interface ProductOverviewInput extends NativeStackScreenProps<ShopStackType, ShopRoutes.Home> { } 
 
-export const ProductOverviewScreen: React.FunctionComponent<ProductOverviewInput> = (props: ProductOverviewInput) => {
+export const ProductOverviewScreen: FunctionComponent<ProductOverviewInput> = (props: ProductOverviewInput) => {
     const [ Styles ] = useObservable(getStyle(ProductOverviewStyles));
     const items = useSelector(getProducts);
-    const navigate = (id: string) => console.log('navigate', { id });
-    const add2cart = (id: string) => console.log('add2cart', { id });
+    const navigate = (product: BasicProduct) => props.navigation.navigate(ShopRoutes.ProductDetails, { product });
+    const add2cart = (product: BasicProduct) => console.log('add2cart', { product });
 
     return (
         <FlatList 

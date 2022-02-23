@@ -6,3 +6,9 @@ export interface ProductModel {
     description: string;
     price: number;
 }
+
+
+export interface BasicProduct { 
+    id: string; 
+    title: string; 
+}

@@ -2,21 +2,21 @@ import React, { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Caption, Card } from 'react-native-paper';
 
-import { ProductModel } from '../store/model/product.model';
+import { BasicProduct, ProductModel } from '../store/model/product.model';
 
 interface ProductListItemInput {
     item: ProductModel;
-    onClick: (productId: string) => void;
-    add2cart: (productId: string) => void;
+    onClick: (product: BasicProduct) => void;
+    add2cart: (product: BasicProduct) => void;
 }
 
 export const ProductListItemComponent: FunctionComponent<ProductListItemInput> = (props: ProductListItemInput) => {
 
-    const navigate = () => props.onClick(props.item.id);
-    const add2cart = () => props.add2cart(props.item.id);
+    const navigate = () => props.onClick(props.item);
+    const add2cart = () => props.add2cart(props.item);
 
     return (
-        <Card style={Styles.listItem}>
+        <Card style={Styles.listItem} onPress={navigate}>
             <Card.Cover source={{ uri: props.item.imageUrl }} />
             <Card.Title title={props.item.title} subtitle={props.item.price} />
             <Card.Actions style={Styles.actions}>

@@ -1,7 +1,9 @@
 export enum ShopRoutes {
-    Home = "Home"
+    Home = "Home",
+    ProductDetails = "ProductDetails",
 }
 
 export type ShopStackType = {
-    [ShopRoutes.Home]: {};
+    [ShopRoutes.Home]: undefined;
+    [ShopRoutes.ProductDetails]: { product: { id: string; title: string }; };
 };
