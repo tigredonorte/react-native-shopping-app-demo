@@ -1,18 +1,18 @@
 import { StyleSheet, View } from 'react-native';
-import { Provider as PaperProvider, ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 import { enableScreens } from 'react-native-screens';
-// import { Routes } from '~routes/routes';
-import { theme } from '~styles/theme';
-import { initStyle, loadFonts } from '~styles/style';
 import { Provider as ReduxProvider } from 'react-redux';
-import { TText } from '~components/TText/TText.component';
+import { combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createStore, combineReducers } from 'redux';
 import { env } from '~environments';
-import { ProductsReducer } from '~store/products.reducer';
+import { ProductsReducer } from '~modules/shop/store/products.reducer';
+import { productStateName } from '~modules/shop/store/products.state';
+import { Routes } from '~routes/routes';
+import { initStyle, loadFonts } from '~styles/style';
+import { theme } from '~styles/theme';
 
 const reducers = combineReducers({
-  products: ProductsReducer
+  [productStateName]: ProductsReducer
 });
 
 const store = createStore(reducers, !env.production? composeWithDevTools(): undefined);
@@ -39,10 +39,7 @@ export default function App() {
   return (
     <PaperProvider theme={theme}>
       <ReduxProvider store={store}>
-        <View style={styles.container}>
-          <TText>Hello World</TText>
-        </View>
-        {/* <Routes></Routes> */}
+        <Routes />
       </ReduxProvider>
     </PaperProvider>
   );

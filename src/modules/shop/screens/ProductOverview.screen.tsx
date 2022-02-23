@@ -1,20 +1,30 @@
-import React from 'react';
 import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { FlatList, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 import { getStyle, ScreenData } from '~styles/responsiveness';
+
+import { ProductListItemComponent } from '../components/ProductListItem.component';
+import { ProductModel } from '../store/model/product.model';
+import { getProducts } from '../store/products.selectors';
 
 interface ProductOverviewInput extends NativeStackScreenProps<any> { } 
 
 export const ProductOverviewScreen: React.FunctionComponent<ProductOverviewInput> = (props: ProductOverviewInput) => {
     const [ Styles ] = useObservable(getStyle(ProductOverviewStyles));
+    const items = useSelector(getProducts);
+    const navigate = (id: string) => console.log('navigate', { id });
+    const add2cart = (id: string) => console.log('add2cart', { id });
+
     return (
-        <View style={Styles.container}>
-            <Text>ProductOverview works!</Text>
-        </View>
+        <FlatList 
+            keyExtractor={(item: ProductModel) => item.id}
+            data={items}
+            renderItem={(item) => <ProductListItemComponent item={item.item} onClick={navigate} add2cart={add2cart} />}
+        />
     );
 };
-
 
 const ProductOverviewStyles = (screenData: ScreenData) => StyleSheet.create({
     container: {
