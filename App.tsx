@@ -6,15 +6,16 @@ import { theme } from '~styles/theme';
 import { initStyle, loadFonts } from '~styles/style';
 import { Provider as ReduxProvider } from 'react-redux';
 import { TText } from '~components/TText/TText.component';
-// import { composeWithDevTools } from 'redux-devtools-extension';
-// import { createStore, combineReducers } from 'redux';
-// import { env } from '~environments';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { createStore, combineReducers } from 'redux';
+import { env } from '~environments';
+import { ProductsReducer } from '~store/products.reducer';
 
-// const reducers = combineReducers({
-//   meals: mealsReducer
-// });
+const reducers = combineReducers({
+  products: ProductsReducer
+});
 
-// const store = createStore(reducers, !env.production? composeWithDevTools(): undefined);
+const store = createStore(reducers, !env.production? composeWithDevTools(): undefined);
 
 /**
  * It's important on huge app to improve performance
@@ -37,12 +38,12 @@ export default function App() {
 
   return (
     <PaperProvider theme={theme}>
-      <View style={styles.container}>
-        <TText>Hello World</TText>
-      </View>
-      {/* <ReduxProvider store={store}> */}
+      <ReduxProvider store={store}>
+        <View style={styles.container}>
+          <TText>Hello World</TText>
+        </View>
         {/* <Routes></Routes> */}
-      {/* </ReduxProvider> */}
+      </ReduxProvider>
     </PaperProvider>
   );
 }
