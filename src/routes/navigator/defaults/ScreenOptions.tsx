@@ -1,4 +1,4 @@
-import { TText } from '~components/TText/TText.component';
+import { TText } from '~components/UI';
 import { i18n } from '~i18n';
 import { theme } from '~styles/theme';
 

@@ -29,16 +29,13 @@ export const ProductDetailsScreen: React.FunctionComponent<ProductDetailsInput> 
 
     if (!product) {
         return (
-            <FetchStateLoading isLoading={true}></FetchStateLoading>
+            <FetchStateLoading></FetchStateLoading>
         );
     }
 
     if (!product.id) {
         return (
-            <FetchStateEmpty
-                isEmpty={true}
-                emptyText="No products found"
-            ></FetchStateEmpty>
+            <FetchStateEmpty emptyText="No products found"></FetchStateEmpty>
         );
     }
 

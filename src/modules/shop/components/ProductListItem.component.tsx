@@ -24,7 +24,7 @@ export const ProductListItemComponent: FunctionComponent<ProductListItemInput> =
             <Card.Title title={props.item.title} subtitle={props.item.price} />
             <Card.Actions style={Styles.actions}>
                 <Button onPress={navigate}>Details</Button>
-                <Button onPress={add2cart} icon="cart">
+                <Button onPress={add2cart} icon="cart" style={{  }}>
                     Add to cart ({total})
                 </Button>
             </Card.Actions>

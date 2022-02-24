@@ -1,8 +1,9 @@
 import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { HeaderButton } from '~components/UI/src/HeaderButton.component';
 import { ShopRoutes, ShopStackType } from '~routes/navigator/ShopNavigator.route.types';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
@@ -21,6 +22,13 @@ export const ProductOverviewScreen: FunctionComponent<ProductOverviewInput> = (p
     const dispatch = useDispatch();
     const navigate = (product: BasicProduct) => props.navigation.navigate(ShopRoutes.ProductDetails, { product });
     const add2cart = (product: ProductModel) => dispatch(AddToCartAction(product));
+
+    useEffect(() => {
+        props.navigation.setOptions({
+            headerRight: () => (<HeaderButton icon='cart' onPress={() => props.navigation.navigate(ShopRoutes.Chart)}/>)
+        });
+    }, [cartItems]);
+
     return (
         <FlatList 
             keyExtractor={(item: ProductModel) => item.id}

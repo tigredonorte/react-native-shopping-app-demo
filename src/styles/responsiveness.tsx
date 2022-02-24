@@ -6,18 +6,19 @@ const sizes = {
     'h1': 3,
     'h2': 2.4,
     'h3': 1.8,
+    'icon': 1.4,
     'h4': 1.2,
     'h5': 1,
     'h6': .8,
 }
 
-export function fontSizer (size: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' = 'h5' ) {
+export function fontSizer (size: 'h1' | 'h2' | 'h3' | 'icon' | 'h4' | 'h5' | 'h6' = 'h5' ) {
     const screenHeight = Dimensions.get('window').height;
     let fontBaseSize = 10;
     if(screenHeight > 800){
-        fontBaseSize = 18;
+        fontBaseSize = 22;
     } else if(screenHeight > 600){
-        fontBaseSize = 14;
+        fontBaseSize = 20;
     } else if(screenHeight > 400){
         fontBaseSize = 12;
     }
@@ -87,5 +88,5 @@ export const getScreenDimensions = () => {
 }
 
 export function getStyle<T>(StyleFn: (data: ScreenData) => T) {
-    return getScreenDimensions().pipe(distinctUntilChanged(), map(StyleFn))
-} 
+    return getScreenDimensions().pipe(distinctUntilChanged(), map(StyleFn));
+}
