@@ -1,5 +1,5 @@
 import { ProductMocks } from './data/dummy-data';
-import { ProductModel } from './model/product.model';
+import { ProductModel } from './product.model';
 
 export const productStateName = 'Products';
 

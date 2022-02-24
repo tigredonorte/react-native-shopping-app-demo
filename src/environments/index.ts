@@ -11,7 +11,6 @@ import { environmentProd } from './environments.prod';
 function getEnvironment(env = ''): typeof environmentProd {
   if (!env || env === 'default') return environmentLocal; // localhost
   if (env.includes('dev')) return environmentDev;
-
   return environmentProd;
 }
 

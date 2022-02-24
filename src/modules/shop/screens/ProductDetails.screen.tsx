@@ -3,19 +3,25 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, Caption, Card, Paragraph } from 'react-native-paper';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FetchStateEmpty } from '~components/FetchStatus/components/FetchStateEmpty';
 import { FetchStateLoading } from '~components/FetchStatus/components/FetchStateLoading';
 import { ShopRoutes, ShopStackType } from '~routes/navigator/ShopNavigator.route.types';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
-import { getProductById } from '../store/products.selectors';
+import { AddToCartAction } from '../store/cart/cart.action';
+import { getCartItemByProductId } from '../store/cart/cart.selectors';
+import { getProductById } from '../store/products/products.selectors';
 
 interface ProductDetailsInput extends NativeStackScreenProps<ShopStackType, ShopRoutes.ProductDetails> { } 
 
 export const ProductDetailsScreen: React.FunctionComponent<ProductDetailsInput> = (props: ProductDetailsInput) => {
     const [ Styles ] = useObservable(getStyle(ProductDetailsStyles));
     const product = useSelector(getProductById(props.route.params.product.id));
+    const chartItem = (useSelector(getCartItemByProductId(props.route.params.product.id)))
+    const total =  chartItem?.amount ?? 0;
+    const dispatch = useDispatch();
+    const add2cart = () => product ? dispatch(AddToCartAction(product)) : null;
 
     useEffect(() => {
         props.navigation.setOptions({title: props.route.params.product.title});
@@ -35,14 +41,15 @@ export const ProductDetailsScreen: React.FunctionComponent<ProductDetailsInput> 
             ></FetchStateEmpty>
         );
     }
+
     return (
         <ScrollView contentContainerStyle={Styles.container}>
             <Card style={Styles.card}>
                 <Card.Title title={product.title} />
                 <Card.Cover source={{uri: product.imageUrl}} />
                 <Card.Actions style={Styles.buttonArea}>
-                    <Button icon="cart">
-                        Add to Cart
+                    <Button icon="cart" onPress={add2cart}>
+                        Add to Cart ({total})
                     </Button>
                 </Card.Actions>
                 <Card.Content>
