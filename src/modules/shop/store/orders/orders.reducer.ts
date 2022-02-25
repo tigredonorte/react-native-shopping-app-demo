@@ -3,7 +3,6 @@ import { OrdersState, initialState } from './orders.state';
 import moment from 'moment';
 import { GenericReducer } from '~utils/reduxUtilities';
 
-
 export const OrdersReducer = GenericReducer<OrdersState, any>(initialState, {
     [OrderActionType.AddOrder]: (state, action: ReturnType<typeof AddOrderAction>) => ({
         ...state,

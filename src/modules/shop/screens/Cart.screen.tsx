@@ -25,13 +25,13 @@ export const CartScreen: FunctionComponent<CartInput> = (props) => {
     const dispatch = useDispatch();
     const items = Object.values(cartItem).sort((a, b) => a.id > b.id ? 1 : -1);
     const emptyDataBtnClick = (): void =>  props.navigation.navigate(ProductRoutes.Home);
+    const removeItem = (item: CartItemModel) => dispatch(RemoveFromCartAction(item));
     const order = () => {
         dispatch(AddOrderAction(items));
         dispatch(ClearCartAction());
         //@ts-ignore
         props.navigation.navigate(SystemRoutes.Orders, { screen: OrdersRoutes.Orders });
     };
-    const removeItem = (item: CartItemModel) => dispatch(RemoveFromCartAction(item));
     return (
         <FetchStateContainer
             loading={!cartItem}
@@ -44,7 +44,7 @@ export const CartScreen: FunctionComponent<CartInput> = (props) => {
         >
             <ScrollView contentContainerStyle={Styles.container}>
                 <View style={Styles.sumaryCard}>
-                    <Caption>Total <TText>${total}</TText></Caption>
+                    <Caption>Total <TText>${total.toFixed(2)}</TText></Caption>
                     <Button mode="contained" onPress={order}>Order Now!</Button>
                 </View>
                 {items.map(it => <CartItemComponent key={it.id} cartItem={it} onRemove={removeItem}/>)}

@@ -1,9 +1,11 @@
 import { GenericReducer } from '~utils/reduxUtilities';
-import * as Actions from './cart.action';
+import { ProductActionType, RemoveProductAction } from '../products';
+
+import { AddToCartAction, CartActionType, ClearCartAction, RemoveFromCartAction } from './cart.action';
 import { CartState as State, initialState } from './cart.state';
 
 export const CartReducer = GenericReducer<State, any>(initialState, {
-    [Actions.CartActionType.AddToCart]: (state, action: ReturnType<typeof Actions.AddToCartAction>) => {
+    [CartActionType.AddToCart]: (state, action: ReturnType<typeof AddToCartAction>) => {
         const getItem = () => (state.items[action.product.id]) ? {
             ...state.items[action.product.id],
             amount: state.items[action.product.id].amount + 1,
@@ -25,10 +27,10 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
             sum: state.sum + action.product.price
         };
     },
-    [Actions.CartActionType.ClearCart]: (state, action: ReturnType<typeof Actions.ClearCartAction>) => {
+    [CartActionType.ClearCart]: (state, action: ReturnType<typeof ClearCartAction>) => {
         return initialState;
     },
-    [Actions.CartActionType.RemoveFromCart]: (state, action: ReturnType<typeof Actions.RemoveFromCartAction>) => {
+    [CartActionType.RemoveFromCart]: (state, action: ReturnType<typeof RemoveFromCartAction>) => {
         const items = { ...state.items };
         const id = action.item.id;
         if (items[id].amount > 1) {
@@ -41,7 +43,8 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
                         amount: items[id].amount - 1,
                         sum: (items[id].sum - action.item.price)
                     }
-                }
+                },
+                sum: state.sum - action.item.price
             }
         }
 
@@ -50,6 +53,20 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
             ...state, 
             items: {...items},
             sum: state.sum - action.item.price
+        };
+    },
+
+    [ProductActionType.Remove]: (state, action: ReturnType<typeof RemoveProductAction>) => {
+        if (!state.items[action.id]) {
+            return state;
+        }
+        const items = { ...state.items };
+        const sum = items[action.id].sum;
+        delete items[action.id];
+        return {
+            ...state, 
+            items: {...items},
+            sum: state.sum - sum
         };
     }
 });

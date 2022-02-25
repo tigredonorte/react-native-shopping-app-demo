@@ -1,13 +1,21 @@
-import React from 'react';
 import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
-interface EditProductInput extends NativeStackScreenProps<any> { } 
+import { UserRoutes, UserStackType } from '../routes';
 
-export const EditProductScreen: React.FunctionComponent<EditProductInput> = (props: EditProductInput) => {
+interface EditProductInput extends NativeStackScreenProps<UserStackType, UserRoutes.EditProduct> { } 
+
+export const EditProductScreen: React.FunctionComponent<EditProductInput> = (props) => {
     const [ Styles ] = useObservable(getStyle(EditProductStyles));
+
+    useEffect(() => {
+        const title = props.route.params?.title ? `Edit ${props.route.params.title}` : 'Add Product';
+        props.navigation.setOptions({ title });
+    }, []);
+
     return (
         <View style={Styles.container}>
             <Text>EditProduct works!</Text>

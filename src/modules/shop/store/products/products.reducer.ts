@@ -3,13 +3,13 @@ import { ProductActionType, RemoveProductAction } from './products.action';
 import { initialState, ProductsState } from './products.state';
 
 export const ProductsReducer = GenericReducer<ProductsState, any>(initialState, {
-    [ProductActionType.Remove]: (state, action: RemoveProductAction) => ({
+    [ProductActionType.Remove]: (state, action: ReturnType<typeof RemoveProductAction>) => ({
         ...state,
         userProducts: [
-            ...state.userProducts.filter(prod => prod.id === action.id)
+            ...state.userProducts.filter(prod => prod.id !== action.id)
         ],
         availableProducts: [
-            ...state.availableProducts.filter(prod => prod.id === action.id)
+            ...state.availableProducts.filter(prod => prod.id !== action.id)
         ]
     })
 });
