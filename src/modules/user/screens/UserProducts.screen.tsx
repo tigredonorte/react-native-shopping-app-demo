@@ -1,26 +1,30 @@
-import React from 'react';
-import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StyleSheet, Text, View } from 'react-native';
-import { getStyle, ScreenData } from '~styles/responsiveness';
+import React from 'react';
+import { FlatList, StyleSheet } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { ProductListItemComponent } from '~modules/shop/components';
+import { ProductRoutes } from '~modules/shop/routes';
+import { BasicProduct, ProductModel } from '~modules/shop/store/products/product.model';
+import { getUserProduct } from '~modules/shop/store/products/products.selectors';
 
 interface UserProductsInput extends NativeStackScreenProps<any> { } 
 
 export const UserProductsScreen: React.FunctionComponent<UserProductsInput> = (props: UserProductsInput) => {
-    const [ Styles ] = useObservable(getStyle(UserProductsStyles));
+    const items = useSelector(getUserProduct);
+    const dispatch = useDispatch();
+    const navigate = (product: BasicProduct) => props.navigation.navigate(ProductRoutes.ProductDetails, { product });
+
     return (
-        <View style={Styles.container}>
-            <Text>UserProducts works!</Text>
-        </View>
+        <FlatList
+            keyExtractor={(item: ProductModel) => item.id}
+            data={items}
+            renderItem={(item) => <ProductListItemComponent
+                item={item.item}
+                onClick={navigate}
+            />}
+        />
     );
 };
 
 
-const UserProductsStyles = (screenData: ScreenData) => StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'flex-start'
-    }
-});
+const Styles = StyleSheet.create({});

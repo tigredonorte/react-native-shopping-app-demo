@@ -5,9 +5,9 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { Button, Caption, Card, Paragraph } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchStateContainer } from '~components/FetchStatus/FetchStateContainer';
-import { ProductRoutes, ProductStackType } from '~routes/navigator/shop/ProductsNavigator.route.types';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
+import { ProductRoutes, ProductStackType } from '../routes/ProductsNavigator.types';
 import { AddToCartAction } from '../store/cart/cart.action';
 import { getCartItemByProductId } from '../store/cart/cart.selectors';
 import { getProductById } from '../store/products/products.selectors';

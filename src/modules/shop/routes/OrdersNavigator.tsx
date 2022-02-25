@@ -1,8 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import { defaultNavigatorOptions, drawerIconOptions } from '~/routes/defaults/ScreenOptions';
 import { OrdersScreen } from '~modules/shop/screens/OrdersScreen';
 
-import { defaultNavigatorOptions, drawerIconOptions } from '../defaults/ScreenOptions';
-import { OrdersRoutes } from './OrdersNavigator.route.types';
+import { OrdersRoutes } from './OrdersNavigator.types';
 
 const Stack = createStackNavigator();
 

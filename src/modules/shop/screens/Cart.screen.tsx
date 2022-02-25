@@ -6,12 +6,12 @@ import { Button, Caption } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchStateContainer } from '~components/FetchStatus/FetchStateContainer';
 import { TText } from '~components/UI';
-import { OrdersRoutes } from '~routes/navigator/shop/OrdersNavigator.route.types';
-import { ProductRoutes, ProductStackType } from '~routes/navigator/shop/ProductsNavigator.route.types';
-import { ShopRoutes } from '~routes/navigator/shop/ShopNavigator.route.types';
+import { OrdersRoutes } from '~modules/shop/routes/OrdersNavigator.types';
+import { SystemRoutes } from '~routes/navigator/SystemNavigator.types';
 import { theme } from '~styles/theme';
 
 import { CartItemComponent } from '../components/CartItem.component';
+import { ProductRoutes, ProductStackType } from '../routes/ProductsNavigator.types';
 import { ClearCartAction, RemoveFromCartAction } from '../store/cart/cart.action';
 import { CartItemModel } from '../store/cart/cart.model';
 import { getCartItems, getCartTotal } from '../store/cart/cart.selectors';
@@ -29,7 +29,7 @@ export const CartScreen: FunctionComponent<CartInput> = (props) => {
         dispatch(AddOrderAction(items));
         dispatch(ClearCartAction());
         //@ts-ignore
-        props.navigation.navigate(ShopRoutes.OrdersNavigator, { screen: OrdersRoutes.Orders });
+        props.navigation.navigate(SystemRoutes.Orders, { screen: OrdersRoutes.Orders });
     };
     const removeItem = (item: CartItemModel) => dispatch(RemoveFromCartAction(item));
     return (

@@ -3,9 +3,9 @@ import React, { FunctionComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { FetchStateContainer } from '~components/FetchStatus';
-import { ProductRoutes } from '~routes/navigator/shop/ProductsNavigator.route.types';
 
 import { OrdersItemComponent } from '../components/OrdersItem.component';
+import { ProductRoutes } from '../routes/ProductsNavigator.types';
 import { OrdersItemModel } from '../store/orders/orders.model';
 import { getOrdersItems } from '../store/orders/orders.selectors';
 

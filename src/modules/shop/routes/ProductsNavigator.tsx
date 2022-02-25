@@ -3,9 +3,9 @@ import { HeaderButton } from '~components/UI/src/HeaderButton.component';
 import { CartScreen } from '~modules/shop/screens/Cart.screen';
 import { ProductDetailsScreen } from '~modules/shop/screens/ProductDetails.screen';
 import { ProductOverviewScreen } from '~modules/shop/screens/ProductOverview.screen';
+import { defaultNavigatorOptions, drawerIconOptions } from '~routes/defaults/ScreenOptions';
 
-import { defaultNavigatorOptions, drawerIconOptions } from '../defaults/ScreenOptions';
-import { ProductRoutes } from './ProductsNavigator.route.types';
+import { ProductRoutes } from './ProductsNavigator.types';
 
 const Stack = createStackNavigator();
 

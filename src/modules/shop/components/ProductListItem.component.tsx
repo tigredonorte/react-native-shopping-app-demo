@@ -7,16 +7,16 @@ import { BasicProduct, ProductModel } from '../store/products/product.model';
 
 interface ProductListItemInput {
     item: ProductModel;
-    chartItem: CartItemModel;
+    chartItem?: CartItemModel;
     onClick: (product: BasicProduct) => void;
-    add2cart: (product: ProductModel) => void;
+    add2cart?: (product: ProductModel) => void;
 }
 
 export const ProductListItemComponent: FunctionComponent<ProductListItemInput> = (props: ProductListItemInput) => {
 
     const navigate = () => props.onClick(props.item);
-    const add2cart = () => props.add2cart(props.item);
-    const total =  props.chartItem?.amount ?? 0;
+    const add2cart = () => props.add2cart && props.add2cart(props.item);
+    const total =  props?.chartItem?.amount ?? 0;
 
     return (
         <Card style={Styles.listItem} onPress={navigate}>
@@ -24,7 +24,7 @@ export const ProductListItemComponent: FunctionComponent<ProductListItemInput> =
             <Card.Title title={props.item.title} subtitle={props.item.price} />
             <Card.Actions style={Styles.actions}>
                 <Button onPress={navigate}>Details</Button>
-                <Button onPress={add2cart} icon="cart" style={{  }}>
+                <Button onPress={add2cart} icon="cart">
                     Add to cart ({total})
                 </Button>
             </Card.Actions>

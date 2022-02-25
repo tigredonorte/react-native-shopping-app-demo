@@ -1,13 +1,12 @@
 import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { HeaderButton } from '~components/UI/src/HeaderButton.component';
-import { ProductRoutes, ProductStackType } from '~routes/navigator/shop/ProductsNavigator.route.types';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
 import { ProductListItemComponent } from '../components/ProductListItem.component';
+import { ProductRoutes, ProductStackType } from '../routes/ProductsNavigator.types';
 import { AddToCartAction } from '../store/cart/cart.action';
 import { getCartItems } from '../store/cart/cart.selectors';
 import { BasicProduct, ProductModel } from '../store/products/product.model';

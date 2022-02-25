@@ -1,6 +1,6 @@
 import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-navigation/drawer';
 import { CommonActions, DrawerActions } from '@react-navigation/native';
-import { useState } from 'react';
+import React from 'react';
 import { Drawer } from 'react-native-paper';
 
 /**
