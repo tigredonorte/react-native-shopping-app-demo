@@ -1,19 +1,22 @@
-import { TText } from '~components/UI';
-import { i18n } from '~i18n';
+import { View } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import { HeaderButton } from '~components/UI/src/HeaderButton.component';
 import { theme } from '~styles/theme';
 
-export const defaultScreenOptions = {
-    headerStyle: {
-        backgroundColor: theme.colors.primary,
-    },
-    headerTintColor: theme.colors.white,
-    headerTitle: (data: any) => {
-        let title = i18n.t(`${data.children}.HeaderTitle`);
-        if (title === `${data.children}.HeaderTitle`) {
-            title = data.children;
-        }
-        return (
-            <TText style={{color: 'white'}}> {title}</TText>
-        )
-    },
+export const defaultNavigatorOptions = {
+  headerStyle: {
+    backgroundColor: theme.colors.primary,
+  },
+  headerTintColor: theme.colors.white
 };
+
+export const drawerIconOptions = (extraParams: (dt: any) => any) => (data: any) => ({
+  headerLeft: () => (
+    <View style={{ flexDirection: 'row' }}>
+      <IconButton icon='menu' color={theme.colors.light_grey} onPress={() => {
+        data.navigation.toggleDrawer();
+      }} />
+    </View>
+  ),
+  ...extraParams(data)
+});

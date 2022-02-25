@@ -1,70 +1,39 @@
-import { useEffect, useState } from 'react';
-import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
+import React from 'react';
 
-import { FetchStateEmpty } from './components/FetchStateEmpty';
-import { FetchStateError } from './components/FetchStateError';
+import { FetchStateEmpty, FetchStateEmptyInput } from './components/FetchStateEmpty';
+import { FetchStateError, FetchStateErrorInput } from './components/FetchStateError';
 import { FetchStateLoading } from './components/FetchStateLoading';
-import { FetchStateModel } from './model/FetchStateModel';
 
 export interface FetchStateInput {
-    fetchDataFn: () => Observable<any[]>,
-    dataLoadedFn: (item: any[]) => void,
-    emptyFn?: () => void,
-    messages: {
-        errorText: string;
-        btnText?: string;
-        emptyText: string;
-        emptyBtnText?: string;
-    }
+    loading?: boolean;
+    empty?: FetchStateEmptyInput & {
+        isEmpty: boolean;
+    };
+    error?: FetchStateErrorInput & {
+        hasError: boolean;
+    };
     children?: any;
 }
 
 export const FetchStateContainer: React.FunctionComponent<FetchStateInput> = (props: FetchStateInput) => {
 
-    const observer$ = new FetchStateModel(props.fetchDataFn);
-    const [ requestState, setRequestState ] = useState(observer$.getValue());
-    let subscription: Subscription;
-    
-    const loadData = () => {
-        subscription = observer$.getState().pipe(
-            distinctUntilChanged()
-        ).subscribe(data => {
-            setRequestState(data);
-            if (data.data.length > 0) {
-                props.dataLoadedFn(data.data);
-            }
-        });
-        observer$.fetchData();
+    if (props.loading) {
+        return <FetchStateLoading />;
     }
 
-    useEffect(() => loadData());
-    useEffect(() => {
-        if (subscription) {
-            subscription.unsubscribe();
-        }
-    }, 
-    // @ts-ignore
-    [ subscription ]);
-
-    if (requestState.loading) {
-        return <FetchStateLoading isLoading={true} ></FetchStateLoading>;
-    }
-
-    if (requestState.error) {
-        return <FetchStateError 
-            hasError={true}  
-            errorText={props.messages.errorText}
-            btnText={props.messages.btnText}
-            fetchDataFn={loadData}
+    if (props.error?.hasError) {
+        return <FetchStateError
+            errorText={props.error?.errorText || ''}
+            btnText={props.error?.btnText}
+            fetchDataFn={props.error?.fetchDataFn}
         ></FetchStateError>;
     }
 
-    if (requestState.empty) {
+    if (props.empty?.isEmpty) {
         return <FetchStateEmpty
-            isEmpty={true}
-            onEmptyData={() => props.emptyFn ? props.emptyFn() : null}
-            emptyText={props.messages.emptyText}
-            emptyBtnText={props.messages.emptyBtnText}
+            onEmptyData={props.empty?.onEmptyData}
+            emptyText={props.empty?.emptyText}
+            emptyBtnText={props.empty?.emptyBtnText}
         ></FetchStateEmpty>;
     }
 

@@ -1,4 +1,4 @@
-import { AddToCartAction, CartActionType, RemoveFromCartAction } from './cart.action';
+import { AddToCartAction, CartActionType, ClearCartAction, RemoveFromCartAction } from './cart.action';
 import { CartItemModel } from './cart.model';
 import { CartState, initialState } from './cart.state';
 
@@ -30,6 +30,9 @@ const CartReducers: {[s: string]: (state: CartState, action: any) => CartState} 
             },
             sum: state.sum + action.product.price
         };
+    },
+    [CartActionType.ClearCart]: (state, action: ReturnType<typeof ClearCartAction>) => {
+        return initialState;
     },
     [CartActionType.RemoveFromCart]: (state, action: ReturnType<typeof RemoveFromCartAction>) => {
         const items = { ...state.items };

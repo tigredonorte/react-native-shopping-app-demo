@@ -1,60 +1,52 @@
 import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React, { FunctionComponent, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, Caption, Card, Paragraph } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { FetchStateEmpty } from '~components/FetchStatus/components/FetchStateEmpty';
-import { FetchStateLoading } from '~components/FetchStatus/components/FetchStateLoading';
-import { ShopRoutes, ShopStackType } from '~routes/navigator/ShopNavigator.route.types';
+import { FetchStateContainer } from '~components/FetchStatus/FetchStateContainer';
+import { ProductRoutes, ProductStackType } from '~routes/navigator/shop/ProductsNavigator.route.types';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
 import { AddToCartAction } from '../store/cart/cart.action';
 import { getCartItemByProductId } from '../store/cart/cart.selectors';
 import { getProductById } from '../store/products/products.selectors';
 
-interface ProductDetailsInput extends NativeStackScreenProps<ShopStackType, ShopRoutes.ProductDetails> { } 
+interface ProductDetailsInput extends NativeStackScreenProps<ProductStackType, ProductRoutes.ProductDetails> { }
 
-export const ProductDetailsScreen: React.FunctionComponent<ProductDetailsInput> = (props: ProductDetailsInput) => {
-    const [ Styles ] = useObservable(getStyle(ProductDetailsStyles));
+export const ProductDetailsScreen: FunctionComponent<ProductDetailsInput> = (props) => {
+    const [Styles] = useObservable(getStyle(ProductDetailsStyles));
     const product = useSelector(getProductById(props.route.params.product.id));
     const chartItem = (useSelector(getCartItemByProductId(props.route.params.product.id)))
-    const total =  chartItem?.amount ?? 0;
+    const total = chartItem?.amount ?? 0;
     const dispatch = useDispatch();
     const add2cart = () => product ? dispatch(AddToCartAction(product)) : null;
 
     useEffect(() => {
-        props.navigation.setOptions({title: props.route.params.product.title});
+        props.navigation.setOptions({ title: props.route.params.product.title });
     }, []);
 
-    if (!product) {
-        return (
-            <FetchStateLoading></FetchStateLoading>
-        );
-    }
-
-    if (!product.id) {
-        return (
-            <FetchStateEmpty emptyText="No products found"></FetchStateEmpty>
-        );
-    }
-
     return (
-        <ScrollView contentContainerStyle={Styles.container}>
-            <Card style={Styles.card}>
-                <Card.Title title={product.title} />
-                <Card.Cover source={{uri: product.imageUrl}} />
-                <Card.Actions style={Styles.buttonArea}>
-                    <Button icon="cart" onPress={add2cart}>
-                        Add to Cart ({total})
-                    </Button>
-                </Card.Actions>
-                <Card.Content>
-                    <Caption>$ {product.price}</Caption>
-                    <Paragraph>{product.description}</Paragraph>
-                </Card.Content>
-            </Card>
-        </ScrollView>
+        <FetchStateContainer
+            empty={{ isEmpty: !product?.id, emptyBtnText: "No products found" }}
+            loading={!product}
+        >
+            <ScrollView contentContainerStyle={Styles.container}>
+                <Card style={Styles.card}>
+                    <Card.Title title={product?.title} />
+                    <Card.Cover source={{ uri: product?.imageUrl }} />
+                    <Card.Actions style={Styles.buttonArea}>
+                        <Button icon="cart" onPress={add2cart}>
+                            Add to Cart ({total})
+                        </Button>
+                    </Card.Actions>
+                    <Card.Content>
+                        <Caption>$ {product?.price}</Caption>
+                        <Paragraph>{product?.description}</Paragraph>
+                    </Card.Content>
+                </Card>
+            </ScrollView>
+        </FetchStateContainer>
     );
 };
 

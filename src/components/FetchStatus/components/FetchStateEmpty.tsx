@@ -13,16 +13,16 @@ export interface FetchStateEmptyInput {
 export const FetchStateEmpty = (props: FetchStateEmptyInput) => (
     <View style={Styles.stateContainer}>
         { 
-            props.emptyText ? 
-                <TText style={Styles.emptyText}> 
-                    {props.emptyText} 
-                </TText> : null
+            props.emptyText && 
+            <TText style={Styles.emptyText}> 
+                {props.emptyText} 
+            </TText>
         }
         { 
-            props.emptyBtnText ?
-                <Button mode="contained" onPress={() => props.onEmptyData ? props.onEmptyData() : null }>
-                    {props.emptyBtnText}
-                </Button>: null 
+            !props.emptyBtnText && 
+            <Button mode="contained" onPress={props.onEmptyData}>
+                {props.emptyBtnText}
+            </Button>
         }
     </View>
 );
