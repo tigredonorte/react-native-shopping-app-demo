@@ -2,6 +2,7 @@ import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { FunctionComponent } from 'react';
 import { FlatList, StyleSheet } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStyle, ScreenData } from '~styles/responsiveness';
 
@@ -15,11 +16,10 @@ import { getProducts } from '../store/products/products.selectors';
 interface ProductOverviewInput extends NativeStackScreenProps<ProductStackType, ProductRoutes.Home> { } 
 
 export const ProductOverviewScreen: FunctionComponent<ProductOverviewInput> = (props: ProductOverviewInput) => {
-    const [ Styles ] = useObservable(getStyle(ProductOverviewStyles));
     const items = useSelector(getProducts);
     const cartItems = useSelector(getCartItems);
     const dispatch = useDispatch();
-    const navigate = (product: BasicProduct) => props.navigation.navigate(ProductRoutes.ProductDetails, { product });
+    const navigate = (product: ProductModel) => props.navigation.navigate(ProductRoutes.ProductDetails, { product });
     const add2cart = (product: ProductModel) => dispatch(AddToCartAction(product));
 
     return (
@@ -28,19 +28,15 @@ export const ProductOverviewScreen: FunctionComponent<ProductOverviewInput> = (p
             data={items}
             renderItem={(item) => <ProductListItemComponent 
                 item={item.item}
-                chartItem={cartItems[item.item.id]}
                 onClick={navigate}
-                add2cart={add2cart}
-            />}
+            > 
+                <Button onPress={() => navigate(item.item)}>Details</Button>
+                <Button onPress={() => add2cart(item.item)} icon="cart">
+                    Add to cart ({cartItems[item?.item?.id]?.amount || 0})
+                </Button>
+            </ProductListItemComponent>}
         />
     );
 };
 
-const ProductOverviewStyles = (screenData: ScreenData) => StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'flex-start'
-    }
-});
+const Styles = StyleSheet.create({});

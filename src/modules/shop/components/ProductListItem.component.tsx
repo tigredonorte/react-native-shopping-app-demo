@@ -1,32 +1,25 @@
 import React, { FunctionComponent } from 'react';
 import { StyleSheet } from 'react-native';
-import { Button, Card } from 'react-native-paper';
-import { CartItemModel } from '../store/cart/cart.model';
+import { Card } from 'react-native-paper';
 
-import { BasicProduct, ProductModel } from '../store/products/product.model';
+import { CartItemModel } from '../store/cart/cart.model';
+import { ProductModel } from '../store/products/product.model';
 
 interface ProductListItemInput {
     item: ProductModel;
     chartItem?: CartItemModel;
-    onClick: (product: BasicProduct) => void;
-    add2cart?: (product: ProductModel) => void;
+    onClick: (product: ProductModel) => void;
 }
 
-export const ProductListItemComponent: FunctionComponent<ProductListItemInput> = (props: ProductListItemInput) => {
+export const ProductListItemComponent: FunctionComponent<ProductListItemInput> = (props) => {
 
-    const navigate = () => props.onClick(props.item);
-    const add2cart = () => props.add2cart && props.add2cart(props.item);
-    const total =  props?.chartItem?.amount ?? 0;
-
+    const onClick = () => props.onClick(props.item);
     return (
-        <Card style={Styles.listItem} onPress={navigate}>
+        <Card style={Styles.listItem} onPress={onClick}>
             <Card.Cover source={{ uri: props.item.imageUrl }} />
             <Card.Title title={props.item.title} subtitle={props.item.price} />
             <Card.Actions style={Styles.actions}>
-                <Button onPress={navigate}>Details</Button>
-                <Button onPress={add2cart} icon="cart">
-                    Add to cart ({total})
-                </Button>
+                {props.children}
             </Card.Actions>
         </Card>
     )

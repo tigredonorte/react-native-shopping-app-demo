@@ -12,10 +12,9 @@ export interface FetchStateInput {
     error?: FetchStateErrorInput & {
         hasError: boolean;
     };
-    children?: any;
 }
 
-export const FetchStateContainer: React.FunctionComponent<FetchStateInput> = (props: FetchStateInput) => {
+export const FetchStateContainer: React.FunctionComponent<FetchStateInput> = (props) => {
 
     if (props.loading) {
         return <FetchStateLoading />;

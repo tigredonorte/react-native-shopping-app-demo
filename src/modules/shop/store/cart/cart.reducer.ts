@@ -1,15 +1,9 @@
-import { AddToCartAction, CartActionType, ClearCartAction, RemoveFromCartAction } from './cart.action';
-import { CartItemModel } from './cart.model';
-import { CartState, initialState } from './cart.state';
+import { GenericReducer } from '~utils/reduxUtilities';
+import * as Actions from './cart.action';
+import { CartState as State, initialState } from './cart.state';
 
-const getStateWithTotal = (state: CartState): CartState => ({
-    ...state,
-    sum: Object.values(state.items).reduce((acc: number, cartItem: CartItemModel) => acc + cartItem.sum, 0)
-})
-
-const CartReducers: {[s: string]: (state: CartState, action: any) => CartState} = {
-    [CartActionType.AddToCart]: (state, action: ReturnType<typeof AddToCartAction>): CartState => {
-
+export const CartReducer = GenericReducer<State, any>(initialState, {
+    [Actions.CartActionType.AddToCart]: (state, action: ReturnType<typeof Actions.AddToCartAction>) => {
         const getItem = () => (state.items[action.product.id]) ? {
             ...state.items[action.product.id],
             amount: state.items[action.product.id].amount + 1,
@@ -31,10 +25,10 @@ const CartReducers: {[s: string]: (state: CartState, action: any) => CartState} 
             sum: state.sum + action.product.price
         };
     },
-    [CartActionType.ClearCart]: (state, action: ReturnType<typeof ClearCartAction>) => {
+    [Actions.CartActionType.ClearCart]: (state, action: ReturnType<typeof Actions.ClearCartAction>) => {
         return initialState;
     },
-    [CartActionType.RemoveFromCart]: (state, action: ReturnType<typeof RemoveFromCartAction>) => {
+    [Actions.CartActionType.RemoveFromCart]: (state, action: ReturnType<typeof Actions.RemoveFromCartAction>) => {
         const items = { ...state.items };
         const id = action.item.id;
         if (items[id].amount > 1) {
@@ -58,16 +52,4 @@ const CartReducers: {[s: string]: (state: CartState, action: any) => CartState} 
             sum: state.sum - action.item.price
         };
     }
-}
-
-export const CartReducer = (state: CartState = initialState, action: any): CartState => {
-    if (CartReducers[action.type]) {
-        try {
-            const newState = CartReducers[action.type](state, action);
-            return newState ?? state;
-        } catch (error) {
-            console.error({ action, error });
-        }
-    }
-    return state;
-}
+});

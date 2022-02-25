@@ -1,17 +1,15 @@
+import { GenericReducer } from '~utils/reduxUtilities';
+import { ProductActionType, RemoveProductAction } from './products.action';
 import { initialState, ProductsState } from './products.state';
 
-const ProductsReducers: {[s: string]: (state: ProductsState, action: any) => ProductsState } = {
-    
-};
-
-export const ProductsReducer = (state: ProductsState = initialState, action: any): ProductsState => {
-    if (ProductsReducers[action.type]) {
-        try {
-            const newState = ProductsReducers[action.type](state, action);
-            return newState ?? state;
-        } catch (error) {
-            console.error({ action, error });
-        }
-    }
-    return state;
-}
+export const ProductsReducer = GenericReducer<ProductsState, any>(initialState, {
+    [ProductActionType.Remove]: (state, action: RemoveProductAction) => ({
+        ...state,
+        userProducts: [
+            ...state.userProducts.filter(prod => prod.id === action.id)
+        ],
+        availableProducts: [
+            ...state.availableProducts.filter(prod => prod.id === action.id)
+        ]
+    })
+});

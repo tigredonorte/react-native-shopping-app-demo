@@ -10,7 +10,8 @@ import { ProductRoutes } from './ProductsNavigator.types';
 const Stack = createStackNavigator();
 
 const cartMenuIconOption = (props: any) => ({
-  headerRight: () => (<HeaderButton icon='cart' onPress={() => props.navigation.navigate(ProductRoutes.Cart)}/>)
+  headerRight: () => (<HeaderButton icon='cart' onPress={() => props.navigation.navigate(ProductRoutes.Cart)}/>),
+  headerLeft: () => <HeaderButton icon='arrow-left' onPress={() => props.navigation.goBack()}/>
 })
 
 export const ProductsNavigator = () => (

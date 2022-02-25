@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 
@@ -12,7 +13,7 @@ const Styles = StyleSheet.create({
 
 export interface FetchStateLoadingInput {}
 
-export const FetchStateLoading = (props: FetchStateLoadingInput) => (
+export const FetchStateLoading: React.FunctionComponent<FetchStateLoadingInput> = (props) => (
     <View style={Styles.stateContainer}>
         <ActivityIndicator size="large" />
     </View>

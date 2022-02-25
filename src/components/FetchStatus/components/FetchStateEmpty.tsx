@@ -10,7 +10,7 @@ export interface FetchStateEmptyInput {
     emptyBtnText?: string;
 }
 
-export const FetchStateEmpty = (props: FetchStateEmptyInput) => (
+export const FetchStateEmpty: React.FunctionComponent<FetchStateEmptyInput> = (props) => (
     <View style={Styles.stateContainer}>
         { 
             props.emptyText && 
@@ -19,7 +19,7 @@ export const FetchStateEmpty = (props: FetchStateEmptyInput) => (
             </TText>
         }
         { 
-            !props.emptyBtnText && 
+            props.emptyBtnText && 
             <Button mode="contained" onPress={props.onEmptyData}>
                 {props.emptyBtnText}
             </Button>

@@ -9,7 +9,7 @@ export interface FetchStateErrorInput {
     errorText: string;
     btnText?: string;
 }
-export const FetchStateError = (props: FetchStateErrorInput) => (
+export const FetchStateError: React.FunctionComponent<FetchStateErrorInput> = (props) => (
     <View style={Styles.stateContainer}>
         <TText style={Styles.errorText}> {props.errorText} </TText>
         { 

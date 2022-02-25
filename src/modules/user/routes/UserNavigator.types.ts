@@ -3,7 +3,7 @@ export enum UserRoutes {
     EditProduct = "EditProduct",
 }
 
-export type OrderStackType = {
+export type UserStackType = {
     [UserRoutes.ListProducts]: undefined;
-    [UserRoutes.EditProduct]: undefined;
+    [UserRoutes.EditProduct]: { id: string; title: string; };
 };

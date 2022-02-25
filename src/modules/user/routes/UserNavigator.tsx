@@ -8,8 +8,9 @@ import { UserRoutes } from './UserNavigator.types';
 
 const Stack = createStackNavigator();
 
-const cartMenuIconOption = (props: any) => ({
-  headerRight: () => (<HeaderButton icon='cart' onPress={() => props.navigation.navigate(UserRoutes.EditProduct)}/>)
+const cartMenuIconOption = (title: string) => (props: any) => ({
+  title,
+  headerRight: () => (<HeaderButton icon='plus-circle-outline' onPress={() => props.navigation.navigate(UserRoutes.EditProduct)}/>)
 })
 
 export const AdminNavigator = () => (
@@ -20,7 +21,7 @@ export const AdminNavigator = () => (
     <Stack.Screen
       name={UserRoutes.ListProducts}
       component={UserProductsScreen}
-      options={drawerIconOptions(cartMenuIconOption)}
+      options={drawerIconOptions(cartMenuIconOption('My Products'))}
     />
     <Stack.Screen
       name={UserRoutes.EditProduct}
