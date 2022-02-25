@@ -1,10 +1,10 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { FlatList, StyleSheet } from 'react-native';
-import { Button, IconButton } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ProductListItemComponent } from '~modules/shop/components';
-import { ProductRoutes, ProductStackType } from '~modules/shop/routes';
+import { ProductRoutes, ProductStackType } from '~modules/shop/routes/ProductsNavigator.types';
 import { RemoveProductAction } from '~modules/shop/store/products';
 import { BasicProduct, ProductModel } from '~modules/shop/store/products/product.model';
 import { getUserProduct } from '~modules/shop/store/products/products.selectors';

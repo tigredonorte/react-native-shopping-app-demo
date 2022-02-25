@@ -13,13 +13,13 @@ export interface FetchStateEmptyInput {
 export const FetchStateEmpty: React.FunctionComponent<FetchStateEmptyInput> = (props) => (
     <View style={Styles.stateContainer}>
         { 
-            props.emptyText && 
+            props.emptyText &&
             <TText style={Styles.emptyText}> 
                 {props.emptyText} 
             </TText>
         }
         { 
-            props.emptyBtnText && 
+            props.emptyBtnText &&
             <Button mode="contained" onPress={props.onEmptyData}>
                 {props.emptyBtnText}
             </Button>

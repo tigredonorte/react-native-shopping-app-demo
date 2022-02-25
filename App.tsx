@@ -29,9 +29,9 @@ enableScreens();
 export default function App() {
   return (
     <ThemeInitilizer theme={theme}>
-      <ReduxProvider store={store}>
-        <Routes />
-      </ReduxProvider>
+       <ReduxProvider store={store}>
+         <Routes />
+       </ReduxProvider>
     </ThemeInitilizer>
   );
 }
