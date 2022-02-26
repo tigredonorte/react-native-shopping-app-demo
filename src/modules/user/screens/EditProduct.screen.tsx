@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { FunctionComponent, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { creatFormBase, FormContainerComponent, FormParameters, ValidateMaxLength, ValidateMinLength, ValidateRequired, ValidateUrl } from '~components/Form';
+import { creatFormBase, FormContainerComponent, FormParameters, ValidateMaxLength, ValidateMaxValue, ValidateMinLength, ValidateMinValue, ValidateRequired, ValidateUrl } from '~components/Form';
 import { AddProductAction, EditProductAction, getUserProductById } from '~modules/shop/store/products';
 
 import { UserRoutes, UserStackType } from '../routes';
@@ -51,6 +51,8 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
             title: "Price",
             validationFn: [
                 ValidateRequired,
+                ValidateMinValue(0),
+                ValidateMaxValue(100000)
             ],
         }),
         creatFormBase({

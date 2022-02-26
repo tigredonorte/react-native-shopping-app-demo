@@ -1,17 +1,21 @@
 import { FormItemType, FormState, ValidateFn } from "./FormFieldModel";
 
 export const checkValidity = (validationFn: ValidateFn[], value: any): FormState => {
-    if (!validationFn) {
-        return {
-            valid: true,
-            errorMessage: undefined
-        };
-    }
-    for (const i in validationFn) {
-        const validation = validationFn[i](value);
-        if (!validation.valid) {
-            return validation;
+    try {
+        if (!validationFn) {
+            return {
+                valid: true,
+                errorMessage: undefined
+            };
         }
+        for (const i in validationFn) {
+            const validation = validationFn[i](value);
+            if (!validation.valid) {
+                return validation;
+            }
+        }
+    } catch (error) {
+        console.warn(error);
     }
     return {
         valid: true,

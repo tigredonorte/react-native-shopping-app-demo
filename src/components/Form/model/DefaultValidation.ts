@@ -17,6 +17,18 @@ export const ValidateMaxLength = (length: number): ValidateFn => (value: any) =>
     errorMessage: `Enter a maximum of ${length} characters`
 });
 
+
+export const ValidateMinValue = (minValue: number): ValidateFn => (value: number) => ({
+    valid: value > minValue,
+    errorMessage: `Type a number greater than ${minValue}`
+});
+
+
+export const ValidateMaxValue = (maxValue: number): ValidateFn => (value: number) => ({
+    valid: value <= maxValue,
+    errorMessage: `Type a number lesser than ${maxValue}`
+});
+
 export const ValidateUrl: ValidateFn = (str: string) => {
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
         '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name

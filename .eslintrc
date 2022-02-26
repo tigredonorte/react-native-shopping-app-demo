@@ -9,17 +9,14 @@
       "react-native"
   ],
   "extends": [
-      "eslint:recommended",
       "plugin:react/recommended"
   ],
   "rules": {
     "array-bracket-spacing": ["error", "always", { "objectsInArrays": false }],
     "object-curly-spacing": ["error", "always", { "arraysInObjects": false }],
     "react-native/no-unused-styles": 2,
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "react-native/split-platform-components": 2,
     "react-native/no-inline-styles": 2,
-    // "react-native/no-color-literals": 2,
     "react/prop-types": ["error", { "ignore": ["navigation"] }],
     "space-before-function-paren": ["error", "never"]
   },

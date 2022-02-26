@@ -1,11 +1,12 @@
-import React, { FunctionComponent, useState, useReducer } from 'react';
+import React, { FunctionComponent, useReducer } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
-import { FormItemType } from './model/FormFieldModel';
-import { FormItem } from './components/FormItemComponent';
 import { FormErrorComponent } from './components/ErrorComponent';
+import { FormItem } from './components/FormItemComponent';
+import { FormItemType } from './model/FormFieldModel';
+import { checkValidity } from './model/FormItemFunctions';
 
 export type FormParameters = FormItemType[];
 
@@ -18,7 +19,7 @@ interface FormState {
     valid: boolean,
     touched: boolean,
     items: {[s: string]: FormItemBasic}
-};
+}
 
 type ReducerFn<T, M> = (state: T, action: {type: string; payload: M }) => T;
 
@@ -35,7 +36,7 @@ const getInitialFormStatus = (form: FormParameters) => {
     for (const formItem of form) {
         items[formItem.key] = {
             value: formItem.value,
-            valid: formItem.valid
+            valid: checkValidity(formItem.validationFn, formItem.value).valid
         }
     }
     return {
@@ -54,7 +55,7 @@ interface FormContainerInput {
 
 export const FormContainerComponent: FunctionComponent<FormContainerInput> = (props) => {
 
-    const [formState, formDispatch] = useReducer<ReducerFn<FormState, FormItemType>, FormState>(
+    const [ formState, formDispatch ] = useReducer<ReducerFn<FormState, FormItemType>, FormState>(
         (state, action) => {
             if (action.type === 'update') {
                 const items = { 
@@ -110,14 +111,14 @@ export const FormContainerComponent: FunctionComponent<FormContainerInput> = (pr
             }
             <Button 
                 onPress={save}
-                labelStyle={{ fontSize: 24 }}
+                labelStyle={Styles.button}
                 mode="contained"
                 disabled={!formState.valid||!formState.touched}
                 icon={`content-save${props.isEditing ? '-edit' : ''}-outline`}
             > Save </Button>
             { 
                 !formState.valid &&
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <View style={Styles.errorContainer}>
                     <FormErrorComponent errorMessage='You have errors on your form'/> 
                 </View>
             }
@@ -129,5 +130,12 @@ const Styles = StyleSheet.create({
     container: {
         padding: 10,
         marginHorizontal: 10
+    },
+    button: { 
+        fontSize: 24 
+    },
+    errorContainer: { 
+        alignItems: 'center', 
+        justifyContent: 'center' 
     }
 });
