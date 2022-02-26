@@ -53,8 +53,6 @@ export const CartScreen: FunctionComponent<CartInput> = (props) => {
     );
 };
 
-
-// const CartStyles = (screenData: ScreenData) => StyleSheet.create({
 const Styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -67,8 +65,5 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: theme.colors.white,
-    },
-    total: {
-        alignItems: 'center'
-    },
+    }
 });

@@ -8,7 +8,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "lint": "./node_modules/.bin/eslint --ext .ts,.tsx .",
+    "lint:fix": "./node_modules/.bin/eslint --fix --ext .ts,.tsx ."
   },
   "dependencies": {
     "@expo-google-fonts/lato": "^0.2.2",

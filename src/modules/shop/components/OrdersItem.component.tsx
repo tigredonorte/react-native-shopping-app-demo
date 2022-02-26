@@ -21,11 +21,11 @@ export const OrdersItemComponent: React.FunctionComponent<OrdersItemInput> = (pr
     return (
         <View style={Styles.itemContainer}>
             <View style={Styles.headerContainer}>
-                <View style={Styles.textItem}>
+                <View>
                     <Caption>Date</Caption>
                     <TText>{date}</TText>
                 </View>
-                <View style={Styles.textItem}>
+                <View>
                     <Caption>Total</Caption>
                     <TText>{props.orderItem.total.toFixed(2)}</TText>
                 </View>
@@ -43,7 +43,7 @@ export const OrdersItemComponent: React.FunctionComponent<OrdersItemInput> = (pr
                     }
                 </View>
             }
-            <View style={{alignItems: 'center'}}>
+            <View style={Styles.iconContainer}>
                 <IconButton 
                     icon={!showDetails ? 'chevron-down' : 'chevron-up'} 
                     onPress={() => setShowDetails(!showDetails) }
@@ -71,14 +71,14 @@ const Styles = StyleSheet.create({
         borderTopColor: theme.colors.light_grey, 
         borderTopWidth: 1
     },
-    textItem: {
-        
-    },
     itemsTitleContainer: {
         paddingBottom: 5,
-        marginBottom: 5
+        marginBottom: 5,
     },
     itemsTitle: {
-        color: theme.colors.disabled
-    }
+        color: theme.colors.disabled,
+    },
+    iconContainer: { 
+        alignItems: 'center',
+    },
 });

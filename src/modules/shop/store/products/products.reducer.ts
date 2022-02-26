@@ -9,11 +9,11 @@ export const ProductsReducer = GenericReducer<ProductsState, ProductActionTypes>
         return {
             ...state,
             userProducts: [
-                {...action.product, ownerId: 'u1', id},
+                { ...action.product, ownerId: 'u1', id },
                 ...state.userProducts,
             ],
             availableProducts: [
-                {...action.product, ownerId: 'u1', id},
+                { ...action.product, ownerId: 'u1', id },
                 ...state.availableProducts,
             ]
         };
@@ -21,8 +21,8 @@ export const ProductsReducer = GenericReducer<ProductsState, ProductActionTypes>
     [Action.Edit]: (state, action: ReturnType<typeof EditProductAction>) => {
         return {
             ...state,
-            availableProducts: [...state.availableProducts.map(it => it.id === action.id ? {...it, ...action.product} : it)],
-            userProducts: [...state.userProducts.map(it => it.id === action.id ? {...it, ...action.product} : it)]
+            availableProducts: [ ...state.availableProducts.map(it => it.id === action.id ? { ...it, ...action.product } : it) ],
+            userProducts: [ ...state.userProducts.map(it => it.id === action.id ? { ...it, ...action.product } : it) ]
         };
     },
     [Action.Remove]: (state, action: ReturnType<typeof RemoveProductAction>) => ({

@@ -1,4 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 import { defaultNavigatorOptions, drawerIconOptions } from '~/routes/defaults/ScreenOptions';
 import { OrdersScreen } from '~modules/shop/screens/OrdersScreen';
 

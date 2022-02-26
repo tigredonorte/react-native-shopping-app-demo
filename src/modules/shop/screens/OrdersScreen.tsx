@@ -37,11 +37,4 @@ export const OrdersScreen: FunctionComponent<OrdersInput> = (props) => {
     );
 };
 
-const Styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'flex-start'
-    }
-});
+const Styles = StyleSheet.create({});

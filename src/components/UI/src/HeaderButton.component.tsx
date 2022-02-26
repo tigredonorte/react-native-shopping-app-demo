@@ -1,3 +1,4 @@
+import React, { FunctionComponent } from 'react';
 import { IconButton } from 'react-native-paper';
 import { fontSizer } from '~styles/responsiveness';
 import { theme } from '~styles/theme';
@@ -8,7 +9,7 @@ export interface HeaderButtonInput {
     onPress: () => void;
 }
 
-export const HeaderButton: React.FunctionComponent<HeaderButtonInput> = (props: HeaderButtonInput) => {
+export const HeaderButton: FunctionComponent<HeaderButtonInput> = (props: HeaderButtonInput) => {
     return (
         <IconButton
             icon={props.icon}

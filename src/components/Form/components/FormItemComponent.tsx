@@ -14,7 +14,7 @@ interface FormItemInput {
 
 export const FormItem = (props: FormItemInput) => {
     
-    const [field, setField] = useState<{value: any, validityState: FormState}>(initField(props.formItem));
+    const [ field, setField ] = useState<{value: any, validityState: FormState}>(initField(props.formItem));
     const onChangeText = (data: any) => setField({
         value: data,
         validityState: checkValidity(props.formItem.validationFn, data)
@@ -28,7 +28,7 @@ export const FormItem = (props: FormItemInput) => {
         });
     }
 
-    const extraParams = {...InputType[props.formItem.formType], ...props.formItem?.extraParams};
+    const extraParams = { ...InputType[props.formItem.formType], ...props.formItem?.extraParams };
     return (
         (!props.isEditing || (props.isEditing && props.formItem.editable))
             ? <>

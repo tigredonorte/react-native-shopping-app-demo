@@ -51,7 +51,7 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
         delete items[id];
         return {
             ...state, 
-            items: {...items},
+            items: { ...items },
             sum: state.sum - action.item.price
         };
     },
@@ -65,7 +65,7 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
         delete items[action.id];
         return {
             ...state, 
-            items: {...items},
+            items: { ...items },
             sum: state.sum - sum
         };
     }

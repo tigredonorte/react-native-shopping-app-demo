@@ -1,4 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 import { HeaderButton } from '~components/UI/src/HeaderButton.component';
 import { CartScreen } from '~modules/shop/screens/Cart.screen';
 import { ProductDetailsScreen } from '~modules/shop/screens/ProductDetails.screen';

@@ -1,3 +1,4 @@
+import React, { FunctionComponent } from 'react';
 import { View } from 'react-native';
 import { Button } from 'react-native-paper';
 import { TText } from '~components/UI';
@@ -10,7 +11,7 @@ export interface FetchStateEmptyInput {
     emptyBtnText?: string;
 }
 
-export const FetchStateEmpty: React.FunctionComponent<FetchStateEmptyInput> = (props) => (
+export const FetchStateEmpty: FunctionComponent<FetchStateEmptyInput> = (props) => (
     <View style={Styles.stateContainer}>
         { 
             props.emptyText &&

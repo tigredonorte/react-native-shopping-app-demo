@@ -1,6 +1,8 @@
-import { StyleSheet, View } from "react-native";
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
-import { initStyle, loadFonts } from "./style";
+
+import { initStyle, loadFonts } from './style';
 
 export const ThemeInitilizer = (props: { theme: any; children: any; }) => {
     const [ appLoaded ] = loadFonts();

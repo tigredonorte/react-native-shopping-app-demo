@@ -1,9 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 import { HeaderButton } from '~components/UI/src/HeaderButton.component';
 import { EditProductScreen } from '~modules/user/screens/EditProduct.screen';
 import { UserProductsScreen } from '~modules/user/screens/UserProducts.screen';
-
 import { defaultNavigatorOptions, drawerIconOptions } from '~routes/defaults/ScreenOptions';
+
 import { UserRoutes } from './UserNavigator.types';
 
 const Stack = createStackNavigator();

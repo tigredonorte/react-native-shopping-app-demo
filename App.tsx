@@ -1,3 +1,4 @@
+import React from 'react';
 import { enableScreens } from 'react-native-screens';
 import { Provider as ReduxProvider } from 'react-redux';
 import { combineReducers, createStore } from 'redux';

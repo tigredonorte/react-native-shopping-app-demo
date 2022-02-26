@@ -1,4 +1,5 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import React from 'react';
 import { IconButton } from 'react-native-paper';
 import { OrdersNavigator } from '~modules/shop/routes/OrdersNavigator';
 import { ProductsNavigator } from '~modules/shop/routes/ProductsNavigator';

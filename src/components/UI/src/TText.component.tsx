@@ -1,3 +1,4 @@
+import React, { FunctionComponent } from 'react';
 import { Text } from 'react-native-paper';
 
 export interface TTextInput {

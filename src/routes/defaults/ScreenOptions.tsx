@@ -1,6 +1,6 @@
-import { View } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import { HeaderButton } from '~components/UI/src/HeaderButton.component';
 import { theme } from '~styles/theme';
 
 export const defaultNavigatorOptions = {
@@ -12,11 +12,17 @@ export const defaultNavigatorOptions = {
 
 export const drawerIconOptions = (extraParams: (dt: any) => any) => (data: any) => ({
   headerLeft: () => (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={Styles.container}>
       <IconButton icon='menu' color={theme.colors.light_grey} onPress={() => {
         data.navigation.toggleDrawer();
       }} />
     </View>
   ),
   ...extraParams(data)
+});
+
+const Styles = StyleSheet.create({
+  container: { 
+    flexDirection: 'row'
+  },
 });

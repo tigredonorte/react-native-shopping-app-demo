@@ -12,7 +12,7 @@ const sizes = {
     'h6': .8,
 }
 
-export function fontSizer (size: 'h1' | 'h2' | 'h3' | 'icon' | 'h4' | 'h5' | 'h6' = 'h5' ) {
+export function fontSizer(size: 'h1' | 'h2' | 'h3' | 'icon' | 'h4' | 'h5' | 'h6' = 'h5' ) {
     const screenHeight = Dimensions.get('window').height;
     let fontBaseSize = 10;
     if(screenHeight > 800){

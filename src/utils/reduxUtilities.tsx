@@ -6,7 +6,7 @@ interface BaseAction {
     type: string; 
 }
 
-export function GenericReducer<State, Action> (initialState: State, reducersObj: ReducersObjType<State>) {
+export function GenericReducer<State, Action>(initialState: State, reducersObj: ReducersObjType<State>) {
     return (state: State = initialState, action: Action & BaseAction): State => {
         if (reducersObj[action.type]) {
             try {

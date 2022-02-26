@@ -1,11 +1,9 @@
-import { useObservable } from '@ngneat/react-rxjs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { FunctionComponent, useEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Button, Caption, Card, Paragraph } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { FetchStateContainer } from '~components/FetchStatus/FetchStateContainer';
-import { getStyle, ScreenData } from '~styles/responsiveness';
 
 import { ProductRoutes, ProductStackType } from '../routes/ProductsNavigator.types';
 import { AddToCartAction } from '../store/cart/cart.action';
@@ -15,7 +13,6 @@ import { getProductById } from '../store/products/products.selectors';
 interface ProductDetailsInput extends NativeStackScreenProps<ProductStackType, ProductRoutes.ProductDetails> { }
 
 export const ProductDetailsScreen: FunctionComponent<ProductDetailsInput> = (props) => {
-    const [Styles] = useObservable(getStyle(ProductDetailsStyles));
     const product = useSelector(getProductById(props.route.params.product.id));
     const chartItem = (useSelector(getCartItemByProductId(props.route.params.product.id)))
     const total = chartItem?.amount ?? 0;
@@ -51,7 +48,7 @@ export const ProductDetailsScreen: FunctionComponent<ProductDetailsInput> = (pro
 };
 
 
-const ProductDetailsStyles = (screenData: ScreenData) => StyleSheet.create({
+const Styles = StyleSheet.create({
     container: {
         padding: 10,
         alignItems: 'center',
@@ -59,9 +56,6 @@ const ProductDetailsStyles = (screenData: ScreenData) => StyleSheet.create({
     },
     card: {
         width: '100%',
-    },
-    textStyle: {
-        textAlign: 'center'
     },
     buttonArea: {
         width: '100%',

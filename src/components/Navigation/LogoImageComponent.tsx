@@ -1,12 +1,19 @@
-import { Image } from 'react-native';
+import React, { FunctionComponent } from 'react';
+import { Image, StyleSheet } from 'react-native';
 
 interface LogoImageInput {}
 
-export const LogoImage: React.FunctionComponent<LogoImageInput> = (props) => {
+export const LogoImage: FunctionComponent<LogoImageInput> = (props) => {
     return (
         <Image
-            style={{ width: 50, height: 50 }}
+            style={Styles.img}
             source={require('~assets/logo.png')}
         />
     );
 }
+const Styles = StyleSheet.create({
+    img: {
+        width: 50,
+        height: 50
+    },
+});
