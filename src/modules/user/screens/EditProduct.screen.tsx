@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { FunctionComponent, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { creatFormBase, FormContainerComponent, FormParameters } from '~components/Form';
+import { creatFormBase, FormContainerComponent, FormParameters, ValidateMaxLength, ValidateMinLength, ValidateRequired, ValidateUrl } from '~components/Form';
 import { AddProductAction, EditProductAction, getUserProductById } from '~modules/shop/store/products';
 
 import { UserRoutes, UserStackType } from '../routes';
@@ -22,26 +22,48 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
             key: 'title',
             value: userProduct?.title || '',
             formType: 'text',
-            title: "Title"
+            title: "Title",
+            validationFn: [
+                ValidateRequired,
+                ValidateMinLength(2),
+                ValidateMaxLength(10),
+            ],
+            extraParams: {
+                autoCapitalize: 'sentences',
+                autoCorrect: true
+            }
         }),
         creatFormBase({
             key: 'imageUrl',
             value: userProduct?.imageUrl || '',
-            formType: 'text',
-            title: "Image"
+            formType: 'url',
+            title: "Image",
+            validationFn: [
+                ValidateRequired,
+                ValidateUrl,
+            ],
         }),
         creatFormBase({
             key: 'price',
             value: userProduct?.price,
             editable: false,
             formType: 'decimal',
-            title: "Price"
+            title: "Price",
+            validationFn: [
+                ValidateRequired,
+            ],
         }),
         creatFormBase({
             key: 'description',
             value: userProduct?.description || '',
             formType: 'textArea',
-            title: "Description"
+            title: "Description",
+            extraParams: {
+                autoCorrect: true
+            },
+            validationFn: [
+                ValidateRequired,
+            ],
         }),
     ];
 
@@ -52,5 +74,5 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
         props.navigation.goBack();
     }, []);
 
-    return (<FormContainerComponent isEditing={isEditing} onSave={onSave} formParameters={formParameters}/>);
+    return (<FormContainerComponent isEditing={isEditing} onSave={onSave} formParameters={formParameters} />);
 };
