@@ -16,7 +16,7 @@ export const FormItem = (props: FormItemInput) => {
     
     const [field, setField] = useState<{value: any, validityState: FormState}>(initField(props.formItem));
     const onChangeText = (data: any) => setField({
-        value: data.trimStart(),
+        value: data,
         validityState: checkValidity(props.formItem.validationFn, data)
     });
 

@@ -26,7 +26,7 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
             validationFn: [
                 ValidateRequired,
                 ValidateMinLength(2),
-                ValidateMaxLength(10),
+                ValidateMaxLength(20),
             ],
             extraParams: {
                 autoCapitalize: 'sentences',

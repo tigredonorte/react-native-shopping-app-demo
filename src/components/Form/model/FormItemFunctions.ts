@@ -7,7 +7,6 @@ export const checkValidity = (validationFn: ValidateFn[], value: any): FormState
             errorMessage: undefined
         };
     }
-    value = value?.trim();
     for (const i in validationFn) {
         const validation = validationFn[i](value);
         if (!validation.valid) {

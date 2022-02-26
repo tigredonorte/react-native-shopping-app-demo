@@ -1,12 +1,15 @@
 import { ValidateFn } from "./FormFieldModel";
+import { isNil, isEmpty, toString } from 'ramda';
 
-export const ValidateRequired: ValidateFn = (value: any) => ({
-    valid: value !== '',
-    errorMessage: 'this field is required!'
-});
+export const ValidateRequired: ValidateFn = (value: any) => {
+    return {
+        valid: !isNil(value) && !isEmpty(value) && toString(value).trim() !== '',
+        errorMessage: 'this field is required!'
+    };
+};
 export const ValidateMinLength = (length: number): ValidateFn => (value: any) => ({
     valid: value.length > length,
-    errorMessage: `Type at least ${length - 1} characters`
+    errorMessage: `Type at least ${length + 1} characters`
 });
 
 export const ValidateMaxLength = (length: number): ValidateFn => (value: any) => ({
