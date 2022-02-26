@@ -36,7 +36,7 @@ const getInitialFormStatus = (form: FormParameters) => {
     for (const formItem of form) {
         items[formItem.key] = {
             value: formItem.value,
-            valid: checkValidity(formItem.validationFn, formItem.value).valid
+            valid: checkValidity(formItem.validationFn, formItem.value)?.valid
         }
     }
     return {
@@ -66,21 +66,15 @@ export const FormContainerComponent: FunctionComponent<FormContainerInput> = (pr
                     }
                 };
                 return ({
-                    items,
+                    items: { ...items },
                     touched: true,
                     valid: formIsValid(items)
                 });
             }
             return state;
         }, 
-        {
-            ...getInitialFormStatus(props.formParameters),
-            touched: props.isEditing
-        },
-        () => ({
-            ...getInitialFormStatus(props.formParameters),
-            touched: props.isEditing
-        })
+        getInitialFormStatus(props.formParameters),
+        () => getInitialFormStatus(props.formParameters)
     );
 
     const save = () => {
@@ -117,9 +111,15 @@ export const FormContainerComponent: FunctionComponent<FormContainerInput> = (pr
                 icon={`content-save${props.isEditing ? '-edit' : ''}-outline`}
             > Save </Button>
             { 
-                !formState.valid &&
+                !formState.valid && formState.touched &&
                 <View style={Styles.errorContainer}>
                     <FormErrorComponent errorMessage='You have errors on your form'/> 
+                </View>
+            }
+            { 
+                props.isEditing && (!formState.valid && !formState.touched) &&
+                <View style={Styles.errorContainer}>
+                    <FormErrorComponent errorMessage='Edit something'/> 
                 </View>
             }
         </ScrollView>

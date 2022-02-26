@@ -65,6 +65,7 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
             },
             validationFn: [
                 ValidateRequired,
+                ValidateMinLength(100),
             ],
         }),
     ];
