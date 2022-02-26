@@ -1,42 +1,31 @@
 import { GenericReducer } from '~utils/reduxUtilities';
-import { AddProductAction, EditProductAction } from '.';
-import { ProductActionType, RemoveProductAction } from './products.action';
+import { ProductActionTypes } from '.';
+import { ProductActionType as Action, RemoveProductAction, AddProductAction, EditProductAction } from './products.action';
 import { initialState, ProductsState } from './products.state';
 
-export const ProductsReducer = GenericReducer<ProductsState, any>(initialState, {
-    [ProductActionType.Add]: (state, action: ReturnType<typeof AddProductAction>) => {
-        const state2 = {
+export const ProductsReducer = GenericReducer<ProductsState, ProductActionTypes>(initialState, {
+    [Action.Add]: (state, action: ReturnType<typeof AddProductAction>) => {
+        const id = Math.floor(Math.random() * 1000000).toString();
+        return {
             ...state,
             userProducts: [
+                {...action.product, ownerId: 'u1', id},
                 ...state.userProducts,
-                {
-                    ...action.product,
-                }
             ],
             availableProducts: [
+                {...action.product, ownerId: 'u1', id},
                 ...state.availableProducts,
-                {
-                    ...action.product
-                }
             ]
         };
-        console.log({ state2 });
-        return state2;
     },
-    [ProductActionType.Edit]: (state, action: ReturnType<typeof EditProductAction>) => {
-        const cloneState = {...state};
-        const id1 = cloneState.availableProducts.findIndex((prod) => prod.id === action.id);
-        if (id1) {
-            cloneState.availableProducts[id1] = action.product;
-        }
-        
-        const id2 = cloneState.userProducts.findIndex((prod) => prod.id === action.id);
-        if (id2) {
-            cloneState.userProducts[id2] = action.product;
-        }
-        return cloneState;
+    [Action.Edit]: (state, action: ReturnType<typeof EditProductAction>) => {
+        return {
+            ...state,
+            availableProducts: [...state.availableProducts.map(it => it.id === action.id ? {...it, ...action.product} : it)],
+            userProducts: [...state.userProducts.map(it => it.id === action.id ? {...it, ...action.product} : it)]
+        };
     },
-    [ProductActionType.Remove]: (state, action: ReturnType<typeof RemoveProductAction>) => ({
+    [Action.Remove]: (state, action: ReturnType<typeof RemoveProductAction>) => ({
         ...state,
         userProducts: [
             ...state.userProducts.filter(prod => prod.id !== action.id)

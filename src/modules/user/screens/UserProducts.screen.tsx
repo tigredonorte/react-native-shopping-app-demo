@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import React, { useCallback } from 'react';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { ProductListItemComponent } from '~modules/shop/components';
@@ -18,8 +18,20 @@ interface UserProductsInput extends NativeStackScreenProps<
 export const UserProductsScreen: React.FunctionComponent<UserProductsInput> = (props: UserProductsInput) => {
     const items = useSelector(getUserProduct);
     const dispatch = useDispatch();
-    const editItem = (product: BasicProduct) => props.navigation.navigate(UserRoutes.EditProduct, { id: product.id, title: product.title });
-    const deleteItem = (product: BasicProduct) => dispatch(RemoveProductAction(product.id))
+    const editItem = (product: BasicProduct) => props.navigation.navigate(
+        UserRoutes.EditProduct, { id: product.id, title: product.title }
+    );
+    const deleteItem = useCallback((product: BasicProduct) => {
+        const executeDeletion = () => dispatch(RemoveProductAction(product.id));
+        Alert.alert(
+            'Apagar produto', 
+            'Você deseja apagar o produto?', 
+            [
+                { text: 'Não', style: 'default' },
+                { text: 'Sim', style: 'destructive', onPress: executeDeletion },
+            ]
+        );
+    }, []);
     const navigate = (product: BasicProduct) => props.navigation.navigate(ProductRoutes.ProductDetails, { product });
 
     return (

@@ -1,13 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { creatFormBase, FormContainerComponent, FormParameters } from '~components/Form';
-import { ProductRoutes, ProductStackType } from '~modules/shop/routes/ProductsNavigator.types';
 import { AddProductAction, EditProductAction, getUserProductById } from '~modules/shop/store/products';
 
 import { UserRoutes, UserStackType } from '../routes';
 
-interface EditProductInput extends NativeStackScreenProps<UserStackType & ProductStackType, UserRoutes.EditProduct> { }
+interface EditProductInput extends NativeStackScreenProps<UserStackType, UserRoutes.EditProduct> { }
 
 export const EditProductScreen: FunctionComponent<EditProductInput> = (props) => {
 
@@ -46,19 +45,12 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
         }),
     ];
 
-    const onSave = (data: any) => {
-        const id = Math.floor(Math.random() * 1000000);
+    const onSave = useCallback((data: any) => {
         isEditing
-            ? dispatch(EditProductAction(props.route.params?.id, data))
-            : dispatch(AddProductAction({ ...data, id }));
-            
-        props.navigation.navigate(ProductRoutes.ProductDetails, { 
-            product: { 
-                id: props.route.params?.id ?? id, 
-                title: data.title
-            } 
-        });
-    }
+            ? dispatch(EditProductAction(props.route.params.id, data))
+            : dispatch(AddProductAction(data));
+        props.navigation.goBack();
+    }, []);
 
-    return <FormContainerComponent isEditing={isEditing} onSave={onSave} formParameters={formParameters}/>;
+    return (<FormContainerComponent isEditing={isEditing} onSave={onSave} formParameters={formParameters}/>);
 };
