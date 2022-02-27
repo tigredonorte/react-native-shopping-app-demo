@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useReducer } from 'react';
-import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
+import { FetchStateLoading } from '~components/FetchStatus';
 
 import { FormErrorComponent } from './components/ErrorComponent';
 import { FormItem } from './components/FormItemComponent';
@@ -68,6 +69,7 @@ interface FormContainerInput {
     isEditing: boolean;
     formParameters: FormParameters;
     onSave: (data: { [s: string]: any }) => void;
+    isSaving: boolean;
 }
 
 export const FormContainerComponent: FunctionComponent<FormContainerInput> = (props) => {
@@ -91,6 +93,10 @@ export const FormContainerComponent: FunctionComponent<FormContainerInput> = (pr
     }
 
     const updateFormItem = (payload: FormItemType) => formDispatch({ type: 'update', payload });
+
+    if (props.isSaving) {
+        return (<FetchStateLoading />);
+    }
 
     return (
         <ScrollView contentContainerStyle={Styles.container}>
@@ -117,7 +123,7 @@ export const FormContainerComponent: FunctionComponent<FormContainerInput> = (pr
                     <FormErrorComponent errorMessage='You have errors on your form'/> 
                 </View>
             }
-            { 
+            {
                 props.isEditing && (!formState.valid && !formState.touched) &&
                 <View style={Styles.errorContainer}>
                     <FormErrorComponent errorMessage='Edit something'/> 

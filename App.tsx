@@ -1,7 +1,7 @@
 import React from 'react';
 import { enableScreens } from 'react-native-screens';
 import { Provider as ReduxProvider } from 'react-redux';
-import { combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { env } from '~environments';
 import { CartReducer } from '~modules/shop/store/cart/cart.reducer';
@@ -13,6 +13,7 @@ import { productStateName } from '~modules/shop/store/products/products.state';
 import { Routes } from '~routes/routes';
 import { theme } from '~styles/theme';
 import { ThemeInitilizer } from '~styles/themeInitializer';
+import ReduxThunk from 'redux-thunk';
 
 const reducers = combineReducers({
   [productStateName]: ProductsReducer,
@@ -20,7 +21,8 @@ const reducers = combineReducers({
   [OrdersStateName]: OrdersReducer,
 });
 
-const store = createStore(reducers, !env.production? composeWithDevTools(): undefined);
+const store = createStore(reducers, applyMiddleware(ReduxThunk));
+// const store = createStore(reducers, !env.production? composeWithDevTools(): undefined);
 
 /**
  * It's important on huge app to improve performance

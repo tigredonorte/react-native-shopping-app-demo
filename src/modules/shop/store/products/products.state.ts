@@ -1,4 +1,3 @@
-import { ProductMocks } from './data/dummy-data';
 import { ProductModel } from './product.model';
 
 export const productStateName = 'Products';
@@ -13,6 +12,6 @@ export interface ProductsFullState {
 }
 
 export const initialState: ProductsState = {
-    availableProducts: ProductMocks,
-    userProducts: ProductMocks.filter(prod => prod.ownerId === 'u1')
+    availableProducts: [],
+    userProducts: []
 }

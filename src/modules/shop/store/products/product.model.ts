@@ -7,7 +7,6 @@ export interface ProductModel {
     price: number;
 }
 
-
 export interface BasicProduct { 
     id: string; 
     title: string; 
