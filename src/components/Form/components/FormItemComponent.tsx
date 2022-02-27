@@ -14,18 +14,26 @@ interface FormItemInput {
 
 export const FormItem = (props: FormItemInput) => {
     
-    const [ field, setField ] = useState<{value: any, validityState: FormState}>(initField(props.formItem));
+    const [ field, setField ] = useState<{value: any, validityState: FormState, touched: boolean}>({
+        ...initField(props.formItem),
+        touched: false
+    });
     const debounced = useDebouncedCallback((value: any) => updateForm(value), 400);
 
-    const updateForm = (value: any) => props.updateFormItem({ 
-        ...props.formItem, 
-        valid: field.validityState.valid,
-        value
-    });
+    const updateForm = (value: any) => {
+        if (!field.touched) {
+            return;
+        }
+        props.updateFormItem({ 
+            ...props.formItem, 
+            valid: field.validityState.valid,
+            value
+        });
+    }
 
     const onChangeText = (value: any) => {
         const validityState = checkValidity(props.formItem.validationFn, value);
-        setField({ value, validityState });
+        setField({ value, validityState, touched: true });
         debounced(value);
     };
 
@@ -40,12 +48,13 @@ export const FormItem = (props: FormItemInput) => {
                         value={field.value}
                         placeholder={props.formItem.title}
                         label={props.formItem.label || props.formItem.title}
-                        error={!field.validityState.valid}
-                        onChangeText={onChangeText}
+                        error={field.touched&&!field.validityState.valid}
                         {...extraParams}
+                        onChangeText={onChangeText}
                     />
                     {
-                        !field.validityState.valid && <FormErrorComponent errorMessage={field.validityState.errorMessage} />
+                        field.touched && !field.validityState.valid && 
+                        <FormErrorComponent errorMessage={field.validityState.errorMessage} />
                     }
                 </View>
             </>

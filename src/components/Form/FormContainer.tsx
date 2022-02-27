@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useReducer } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button } from 'react-native-paper';
 
@@ -46,6 +46,23 @@ const getInitialFormStatus = (form: FormParameters) => {
     };
 }
 
+const formReduceFn = (state: FormState, action: {type: string; payload: any }) => {
+    if (action.type === 'update') {
+        const items = { 
+            ...state.items,
+            [action.payload.key]: {
+                value: action.payload.value,
+                valid: action.payload.valid
+            }
+        };
+        return ({
+            items: { ...items },
+            touched: true,
+            valid: formIsValid(items)
+        });
+    }
+    return state;
+};
 
 interface FormContainerInput {
     isEditing: boolean;
@@ -56,23 +73,7 @@ interface FormContainerInput {
 export const FormContainerComponent: FunctionComponent<FormContainerInput> = (props) => {
 
     const [ formState, formDispatch ] = useReducer<ReducerFn<FormState, FormItemType>, FormState>(
-        (state, action) => {
-            if (action.type === 'update') {
-                const items = { 
-                    ...state.items,
-                    [action.payload.key]: {
-                        value: action.payload.value,
-                        valid: action.payload.valid
-                    }
-                };
-                return ({
-                    items: { ...items },
-                    touched: true,
-                    valid: formIsValid(items)
-                });
-            }
-            return state;
-        }, 
+        formReduceFn, 
         getInitialFormStatus(props.formParameters),
         () => getInitialFormStatus(props.formParameters)
     );
@@ -137,5 +138,5 @@ const Styles = StyleSheet.create({
     errorContainer: { 
         alignItems: 'center', 
         justifyContent: 'center' 
-    }
+    },
 });
