@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Caption } from 'react-native-paper';
@@ -20,26 +20,43 @@ import { AddOrderAction } from '../store/orders/orders.action';
 interface CartInput extends NativeStackScreenProps<ProductStackType, ProductRoutes.ProductDetails> { } 
 
 export const CartScreen: FunctionComponent<CartInput> = (props) => {
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState<string>();
     const cartItem = useSelector(getCartItems);
     const total = useSelector(getCartTotal);
     const dispatch = useDispatch();
     const items = Object.values(cartItem).sort((a, b) => a.id > b.id ? 1 : -1);
     const emptyDataBtnClick = (): void =>  props.navigation.navigate(ProductRoutes.Home);
     const removeItem = (item: CartItemModel) => dispatch(RemoveFromCartAction(item));
-    const order = () => {
-        dispatch(AddOrderAction(items));
-        dispatch(ClearCartAction());
-        //@ts-ignore
-        props.navigation.navigate(SystemRoutes.Orders, { screen: OrdersRoutes.Orders });
+    const order = async() => {
+        try {
+            setError('');
+            setLoading(true);
+            await Promise.all([
+                dispatch(AddOrderAction(items)),
+                dispatch(ClearCartAction())
+            ])
+            //@ts-ignore
+            props.navigation.navigate(SystemRoutes.Orders, { screen: OrdersRoutes.Orders });
+        } catch (err: any) {
+            setError(err.message);
+        }
+        setLoading(false);
     };
     return (
         <FetchStateContainer
-            loading={!cartItem}
+            loading={loading}
             empty={{
                 isEmpty: items.length < 1,
                 emptyText: "No Items on chart", 
                 emptyBtnText: "See products",
                 onEmptyData: emptyDataBtnClick,
+            }}
+            error={{
+                hasError: !!error,
+                errorText: !error ? 'Something went wrong' : error,
+                btnText: "Try Again",
+                fetchDataFn: order,
             }}
         >
             <ScrollView contentContainerStyle={Styles.container}>

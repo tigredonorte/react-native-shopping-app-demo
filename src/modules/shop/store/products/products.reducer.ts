@@ -1,21 +1,21 @@
 import { GenericReducer } from '~utils/reduxUtilities';
 
 import {
-    AddProductActionType,
-    EditProductActionType,
-    FetchProductActionType,
+    IAddProduct,
+    IEditProduct,
+    IFetchProduct,
     ProductActionType as Action,
-    RemoveProductActionType,
+    IRemoveProduct,
 } from './products.action';
 import { initialState, ProductsState } from './products.state';
 
 export const ProductsReducer = GenericReducer<ProductsState, any>(initialState, {
-    [Action.Fetch]: (state, action: FetchProductActionType) => ({
+    [Action.Fetch]: (state, action: IFetchProduct) => ({
         ...state,
         availableProducts: action.payload,
         userProducts: action.payload.filter(product => product.ownerId === 'u1')
     }),
-    [Action.Add]: (state, action: AddProductActionType) => ({
+    [Action.Add]: (state, action: IAddProduct) => ({
         ...state,
         userProducts: [
             { ...action.payload, ownerId: 'u1' },
@@ -26,20 +26,20 @@ export const ProductsReducer = GenericReducer<ProductsState, any>(initialState, 
             ...state.availableProducts,
         ]
     }),
-    [Action.Edit]: (state, action: EditProductActionType) => {
+    [Action.Edit]: (state, action: IEditProduct) => {
         return {
             ...state,
             availableProducts: [ ...state.availableProducts.map(it => it.id === action.id ? { ...it, ...action.payload } : it) ],
             userProducts: [ ...state.userProducts.map(it => it.id === action.id ? { ...it, ...action.payload } : it) ]
         };
     },
-    [Action.Remove]: (state, action: RemoveProductActionType) => ({
+    [Action.Remove]: (state, action: IRemoveProduct) => ({
         ...state,
         userProducts: [
-            ...state.userProducts.filter(prod => prod.id !== action.payload)
+            ...state.userProducts.filter(prod => prod.id !== action.id)
         ],
         availableProducts: [
-            ...state.availableProducts.filter(prod => prod.id !== action.payload)
+            ...state.availableProducts.filter(prod => prod.id !== action.id)
         ]
     })
 });

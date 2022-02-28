@@ -1,19 +1,14 @@
-import { AddOrderAction, OrderActionType } from './orders.action';
+import { IAddOrder, IFetchOrder, OrderActionType as Action } from './orders.action';
 import { OrdersState, initialState } from './orders.state';
-import moment from 'moment';
 import { GenericReducer } from '~utils/reduxUtilities';
 
 export const OrdersReducer = GenericReducer<OrdersState, any>(initialState, {
-    [OrderActionType.AddOrder]: (state, action: ReturnType<typeof AddOrderAction>) => ({
+    [Action.Fetch]: (state, action: IFetchOrder) => ({
         ...state,
-        orders: [
-            ...state.orders,
-            {
-                id: moment.utc().toString(),
-                date: moment.utc().format('YYYY-MM-DD'),
-                cartItems: action.items,
-                total: action.items.reduce((acc, it) => acc + it.amount * it.price, 0)
-            }
-        ]
+        orders: action.payload,
+    }),
+    [Action.Add]: (state, action: IAddOrder) => ({
+        ...state,
+        orders: state.orders.concat(action.order)
     })
 });
