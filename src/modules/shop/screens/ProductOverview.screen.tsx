@@ -18,6 +18,7 @@ interface ProductOverviewInput extends NativeStackScreenProps<ProductStackType, 
 export const ProductOverviewScreen: FunctionComponent<ProductOverviewInput> = (props: ProductOverviewInput) => {
     const [ errorMessage, setErrorMessage ] = useState('');
     const [ loading, setLoading ] = useState(false);
+    const [ isRefreshing, setIsRefreshing ] = useState(false);
     const items = useSelector(getProducts);
     const cartItems = useSelector(getCartItems);
     const dispatch = useDispatch();
@@ -26,30 +27,41 @@ export const ProductOverviewScreen: FunctionComponent<ProductOverviewInput> = (p
 
     const loadProducts = useCallback(async() => {
         try {
-            setLoading(true);
+            setIsRefreshing(true);
             setErrorMessage('');
             await dispatch(FetchProductAction());
         } catch (error: any) {
             setErrorMessage(error.message);
         }
-        setLoading(false);
-    }, [ dispatch, setLoading, setErrorMessage ])
+        setIsRefreshing(false);
+    }, [ dispatch, setIsRefreshing, setErrorMessage ])
 
+    // reload data on each visit
     useEffect(
         () => props.navigation.addListener('focus', () => loadProducts()), 
         [ loadProducts ]
     );
 
+    // load data on first load
+    useEffect(() => {
+        setLoading(true);
+        loadProducts().then(() => {
+            setLoading(false);
+        });
+    }, [ loadProducts, setLoading ]);
+
     return (
         <FetchStateContainer
-            loading={loading}
+            loading={ loading }
             error={{ hasError: !!errorMessage, errorText: errorMessage, btnText: "Try again", fetchDataFn: loadProducts }}
             empty={{ isEmpty: !!items && items?.length === 0, emptyText: "No products found" }}
         >
-            <FlatList 
+            <FlatList
+                onRefresh={()=>loadProducts()}
+                refreshing={ isRefreshing }
                 keyExtractor={(item: ProductModel) => item.id}
                 data={items}
-                renderItem={(item) => <ProductListItemComponent 
+                renderItem={(item) => <ProductListItemComponent
                     item={item.item}
                     onClick={navigate}
                 > 
