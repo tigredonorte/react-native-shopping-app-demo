@@ -7,7 +7,7 @@ import { ProductRoutes } from '~modules/shop/routes/ProductsNavigator.types';
 import { AdminNavigator } from '~modules/user/routes';
 
 import { CustomDrawerContent } from '../defaults/CustomDrawer';
-import { SystemRoutes } from './SystemNavigator.types';
+import { SystemRoutes } from './System.routes.types';
 
 const Drawer = createDrawerNavigator();
 

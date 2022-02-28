@@ -35,4 +35,4 @@ export const creatFormBase = (options: Partial<FormItemType>) => ({
     valid: true, 
     editable: true,
     ...options
-}) as FormItemType;
+} as FormItemType);

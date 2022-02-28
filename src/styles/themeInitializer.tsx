@@ -3,17 +3,24 @@ import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Provider as PaperProvider } from 'react-native-paper';
 
 import { initStyle, loadFonts } from './style';
+import { theme } from './theme';
+
+export const SplashScreen: React.FC<{theme?: any;}> = (props) => {
+    return (
+        <PaperProvider theme={ props.theme ?? theme }>
+            <View style={styles.container}>
+                <ActivityIndicator size="large" />
+            </View>
+        </PaperProvider>  
+    );
+}
 
 export const ThemeInitilizer = (props: { theme: any; children: any; }) => {
     const [ appLoaded ] = loadFonts();
 
     if (!appLoaded) {
         return (
-            <PaperProvider theme={props.theme}>
-                <View style={styles.container}>
-                    <ActivityIndicator size="large" />
-                </View>
-            </PaperProvider>
+            <SplashScreen theme={props.theme}/>
         );
     }
     initStyle();

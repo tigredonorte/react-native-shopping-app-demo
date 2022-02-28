@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FetchStateContainer } from '~components/FetchStatus/FetchStateContainer';
 import { TText } from '~components/UI';
 import { OrdersRoutes } from '~modules/shop/routes/OrdersNavigator.types';
-import { SystemRoutes } from '~routes/navigator/SystemNavigator.types';
+import { SystemRoutes } from '~routes/navigator/System.routes.types';
 import { theme } from '~styles/theme';
 
 import { CartItemComponent } from '../components/CartItem.component';

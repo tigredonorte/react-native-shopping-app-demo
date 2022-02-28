@@ -1,9 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
-import { SystemNavigator } from './navigator/SystemNavigator';
+import React, { FunctionComponent } from 'react';
+import { AuthHandler } from '~modules/auth/routes/AuthHandler';
 
-export const Routes = () => (
-    <NavigationContainer>
-        <SystemNavigator />
-    </NavigationContainer>
-);
+import { SystemNavigator } from './navigator/System.routes';
+
+export const Routes: FunctionComponent<{}> = (props) => {
+    return (
+        <NavigationContainer>
+            <AuthHandler>
+                <SystemNavigator />
+                { props.children }
+            </AuthHandler>
+        </NavigationContainer>
+    );
+};

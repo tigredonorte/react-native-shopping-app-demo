@@ -2,8 +2,7 @@ import React from 'react';
 import { enableScreens } from 'react-native-screens';
 import { Provider as ReduxProvider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { env } from '~environments';
+import ReduxThunk from 'redux-thunk';
 import { CartReducer } from '~modules/shop/store/cart/cart.reducer';
 import { CartStateName } from '~modules/shop/store/cart/cart.state';
 import { OrdersReducer } from '~modules/shop/store/orders/orders.reducer';
@@ -13,7 +12,6 @@ import { productStateName } from '~modules/shop/store/products/products.state';
 import { Routes } from '~routes/routes';
 import { theme } from '~styles/theme';
 import { ThemeInitilizer } from '~styles/themeInitializer';
-import ReduxThunk from 'redux-thunk';
 
 const reducers = combineReducers({
   [productStateName]: ProductsReducer,
@@ -33,7 +31,7 @@ export default function App() {
   return (
     <ThemeInitilizer theme={theme}>
        <ReduxProvider store={store}>
-         <Routes />
+          <Routes />
        </ReduxProvider>
     </ThemeInitilizer>
   );
