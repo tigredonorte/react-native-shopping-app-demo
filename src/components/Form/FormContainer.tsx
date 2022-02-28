@@ -70,6 +70,7 @@ interface FormContainerInput {
     formParameters: FormParameters;
     onSave: (data: { [s: string]: any }) => void;
     isSaving: boolean;
+    buttonText?: string;
 }
 
 export const FormContainerComponent: FunctionComponent<FormContainerInput> = (props) => {
@@ -110,13 +111,15 @@ export const FormContainerComponent: FunctionComponent<FormContainerInput> = (pr
                     />
                 ))
             }
-            <Button 
-                onPress={save}
-                labelStyle={Styles.button}
-                mode="contained"
-                disabled={!formState.valid||!formState.touched}
-                icon={`content-save${props.isEditing ? '-edit' : ''}-outline`}
-            > Save </Button>
+            {
+                props.buttonText && <Button 
+                    onPress={save}
+                    labelStyle={Styles.button}
+                    mode={!formState.valid||!formState.touched? 'outlined' : 'contained' }
+                    disabled={!formState.valid||!formState.touched}
+                    icon={`content-save${props.isEditing ? '-edit' : ''}-outline`}
+                > { props.buttonText } </Button>
+            }
             { 
                 !formState.valid && formState.touched &&
                 <View style={Styles.errorContainer}>

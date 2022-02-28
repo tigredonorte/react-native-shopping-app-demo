@@ -1,4 +1,5 @@
-import { OrdersFullState, OrdersStateName } from "./auth.state";
+import { AuthFullState, AuthStateName } from "./auth.state";
 
-export const getOrdersState = (state: OrdersFullState) => state[OrdersStateName];
-export const getOrdersItems = (state: OrdersFullState) => getOrdersState(state)?.orders;
+const getState = (state: AuthFullState) => state[AuthStateName];
+export const getAuthStatus = (state: AuthFullState) => getState(state)?.status;
+export const getAuthToken = (state: AuthFullState) => getState(state)?.token;

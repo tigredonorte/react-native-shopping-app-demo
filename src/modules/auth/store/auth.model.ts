@@ -3,3 +3,13 @@ export interface AuthUserModel {
     name: string;
     email: string;
 }
+
+export interface ISignupModel { 
+    name: string;
+    email: string;
+    password: string;
+};
+export interface ILoginModel { 
+    email: string;
+    password: string;
+};

@@ -1,35 +1,40 @@
 import { ThunkDispatch } from 'redux-thunk';
 import env from '~environments';
 
-import { AuthUserModel as Model } from './auth.model';
+import { AuthUserModel as Model, ILoginModel, ISignupModel } from './auth.model';
 import { AuthState as State } from './auth.state';
 
-enum ActionType {
+export enum AuthActionType {
     Logout = 'LogoutAction',
     Login = 'LoginAction',
     Signup = 'SignupAction',
     Recover = 'RecoverAction',
     SetToken = 'SetTokenAction',
 }
-export { ActionType as AuthActionType }
 
-export interface ISetToken { type: ActionType.SetToken, payload: string };
-export const SetTokenAction = (payload: string) => {
-    return async(dispatch: ThunkDispatch<State, any, ISetToken>): Promise<void> => {
-        try {
-            dispatch({ type: ActionType.SetToken, payload });
-        } catch (error) {
-            throw error;
-        }
-    };
-}
-
-
-export interface ILogin { type: ActionType.Login, payload: Model }
-export const LoginAction = (payload: Model) => {
+export interface ILogin { type: AuthActionType.Login, payload: ILoginModel }
+export const LoginAction = (payload: ILoginModel) => {
     return async(dispatch: ThunkDispatch<State, any, ILogin>): Promise<void> => {
         try {
-            dispatch({ type: ActionType.Login, payload });
+            const resp = await fetch(`${env.authServiceUrl}signInWithPassword?key=`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...payload,
+                    returnSecureToken: true
+                })
+            });
+        
+            if(!resp.ok) {
+                throw new Error('Unable to perform Login!');
+            }
+        
+            const resData = await resp.json();
+
+            console.log(resData);
+            dispatch({ type: AuthActionType.Login, payload });
         } catch (error) {
             throw error;
         }
@@ -39,28 +44,59 @@ export const LoginAction = (payload: Model) => {
 // Action to Logout - Clear all redux states
 export const logoutAction = () => {
     return {
-      type: ActionType.Logout,
+      type: AuthActionType.Logout,
     };
 };
 
-export interface ISignup { type: ActionType.Signup, payload: Model };
-export const SignupAction = (payload: Model) => {
+export interface ISignup { type: AuthActionType.Signup, payload: ISignupModel};
+export const SignupAction = (payload: ISignupModel) => {
     return async(dispatch: ThunkDispatch<State, any, ISignup>): Promise<void> => {
         try {
-            dispatch({ type: ActionType.Signup, payload });
+            const resp = await fetch(`${env.authServiceUrl}signUp?key=`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...payload,
+                    returnSecureToken: true
+                })
+            });
+
+            if(!resp.ok) {
+                throw new Error('Unable to perform Signup!');
+            }
+
+            const resData = await resp.json();
+            console.log(resData);
+
+            // dispatch({ type: AuthActionType.Signup, payload });
+
         } catch (error) {
             throw error;
         }
     };
 }
 
-export interface IRecover { type: ActionType.Recover, payload: Model };
+export interface IRecover { type: AuthActionType.Recover, payload: Model };
 export const RecoverAction = (payload: Model) => {
     return async(dispatch: ThunkDispatch<State, any, IRecover>): Promise<void> => {
         try {
-            dispatch({ type: ActionType.Recover, payload });
+            dispatch({ type: AuthActionType.Recover, payload });
         } catch (error) {
             throw error;
         }
     };
 }
+
+export interface ISetToken { type: AuthActionType.SetToken, payload: string };
+export const SetTokenAction = () => {
+    return async(dispatch: ThunkDispatch<State, any, ISetToken>): Promise<void> => {
+        try {
+            dispatch({ type: AuthActionType.SetToken, payload: '' });
+        } catch (error) {
+            throw error;
+        }
+    };
+}
+

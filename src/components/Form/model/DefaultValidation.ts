@@ -41,3 +41,8 @@ export const ValidateUrl: ValidateFn = (str: string) => {
         errorMessage: `Invalid url!`
     };
 }
+
+export const ValidateEmail: ValidateFn = (email: string) => ({
+    valid: (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)),
+    errorMessage: `Invalid email address!`
+})

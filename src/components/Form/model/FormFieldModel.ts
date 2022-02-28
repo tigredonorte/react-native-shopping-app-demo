@@ -1,6 +1,6 @@
 import { TextInputProps } from 'react-native-paper/lib/typescript/components/TextInput/TextInput';
 
-export const InputType: { [s: string]: { [s: string]: any} } = {
+export const InputType: { [s: string]: Partial<TextInputProps> } = {
     text: {},
     textArea: {
         multiline: true,
@@ -9,6 +9,14 @@ export const InputType: { [s: string]: { [s: string]: any} } = {
     },
     decimal: {
         keyboardType: "decimal-pad"
+    },
+    email: {
+        keyboardType: "email-address",
+        autoCapitalize: 'none',
+    },
+    password: {
+        secureTextEntry: true,
+        autoCapitalize: 'none',
     }
 };
 

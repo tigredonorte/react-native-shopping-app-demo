@@ -3,6 +3,8 @@ import { enableScreens } from 'react-native-screens';
 import { Provider as ReduxProvider } from 'react-redux';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import ReduxThunk from 'redux-thunk';
+import { AuthReducer } from '~modules/auth/store/auth.reducer';
+import { AuthStateName } from '~modules/auth/store/auth.state';
 import { CartReducer } from '~modules/shop/store/cart/cart.reducer';
 import { CartStateName } from '~modules/shop/store/cart/cart.state';
 import { OrdersReducer } from '~modules/shop/store/orders/orders.reducer';
@@ -17,6 +19,7 @@ const reducers = combineReducers({
   [productStateName]: ProductsReducer,
   [CartStateName]: CartReducer,
   [OrdersStateName]: OrdersReducer,
+  [AuthStateName]: AuthReducer,
 });
 
 const store = createStore(reducers, applyMiddleware(ReduxThunk));
