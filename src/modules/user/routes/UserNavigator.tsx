@@ -1,28 +1,31 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, StackNavigationOptions } from '@react-navigation/stack';
 import React from 'react';
 import { HeaderButton } from '~components/UI/src/HeaderButton.component';
-import { EditProductScreen } from '~modules/user/screens/EditProduct.screen';
-import { UserProductsScreen } from '~modules/user/screens/UserProducts.screen';
-import { defaultNavigatorOptions, drawerIconOptions } from '~routes/defaults/ScreenOptions';
 
+import { EditProductScreen } from '../screens/EditProduct.screen';
+import { UserProductsScreen } from '../screens/UserProducts.screen';
 import { UserRoutes } from './UserNavigator.types';
 
 const Stack = createStackNavigator();
 
-const cartMenuIconOption = (title: string) => (props: any) => ({
+const cartMenuIconOption = (title: string, Element: React.FC<any>) => (props: any) => ({
   title,
-  headerRight: () => (<HeaderButton icon='plus-circle-outline' onPress={() => props.navigation.navigate(UserRoutes.EditProduct)}/>)
+  headerRight: () => (<Element icon='plus-circle-outline' onPress={() => props.navigation.navigate(UserRoutes.EditProduct)}/>)
 })
 
-export const AdminNavigator = () => (
+export const AdminNavigator: React.FC<{ 
+  defaultNavigatorOptions: StackNavigationOptions,
+  drawerIconOptions: (data: any) => any,
+  HeaderButton: React.FC<any>
+}> = (props) => (
   <Stack.Navigator
-    screenOptions={defaultNavigatorOptions}
+    screenOptions={props.defaultNavigatorOptions}
     initialRouteName={UserRoutes.ListProducts}
   >
     <Stack.Screen
       name={UserRoutes.ListProducts}
       component={UserProductsScreen}
-      options={drawerIconOptions(cartMenuIconOption('My Products'))}
+      options={props.drawerIconOptions(cartMenuIconOption('My Products', HeaderButton))}
     />
     <Stack.Screen
       name={UserRoutes.EditProduct}

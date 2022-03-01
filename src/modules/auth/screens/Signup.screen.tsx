@@ -38,14 +38,14 @@ export const SignupScreen: React.FC<SignupInput> = (props) => {
     }, [ setIsSaving ]);
 
     const formParameters: FormParameters = [
-        creatFormBase({
-            key: 'name',
-            formType: 'text',
-            title: "Name",
-            validationFn: [
-                ValidateRequired
-            ]
-        }),
+        // creatFormBase({
+        //     key: 'name',
+        //     formType: 'text',
+        //     title: "Name",
+        //     validationFn: [
+        //         ValidateRequired
+        //     ]
+        // }),
         creatFormBase({
             key: 'email',
             formType: 'email',
@@ -71,7 +71,7 @@ export const SignupScreen: React.FC<SignupInput> = (props) => {
     return (
         <View style={Styles.container}>
             <Card style={Styles.card}>
-                <Title style={Styles.title}>Autenticate</Title>
+                <Title style={Styles.title}>Create your new account</Title>
                 <FormContainerComponent
                     isEditing={false}
                     onSave={(data) => onSave(data as ISignupModel)}

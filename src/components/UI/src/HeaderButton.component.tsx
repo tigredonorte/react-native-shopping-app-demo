@@ -9,7 +9,7 @@ export interface HeaderButtonInput {
     onPress: () => void;
 }
 
-export const HeaderButton: FunctionComponent<HeaderButtonInput> = (props: HeaderButtonInput) => {
+export const HeaderButton: React.FC<HeaderButtonInput> = (props: HeaderButtonInput) => {
     return (
         <IconButton
             icon={props.icon}

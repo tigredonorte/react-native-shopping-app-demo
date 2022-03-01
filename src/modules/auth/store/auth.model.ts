@@ -4,12 +4,11 @@ export interface AuthUserModel {
     email: string;
 }
 
-export interface ISignupModel { 
-    name: string;
+export interface ISignupModel {
     email: string;
     password: string;
 };
-export interface ILoginModel { 
+export interface ILoginModel {
     email: string;
     password: string;
 };

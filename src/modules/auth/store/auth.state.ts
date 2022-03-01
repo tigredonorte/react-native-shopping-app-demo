@@ -19,7 +19,7 @@ export const authInitialState: AuthState = {
     token: undefined,
     user: undefined,
     status: {
-        isLoading: false,
+        isLoading: true,
         isSignout: false,
     }
 }

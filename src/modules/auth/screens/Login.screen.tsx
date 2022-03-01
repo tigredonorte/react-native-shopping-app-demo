@@ -39,7 +39,7 @@ export const LoginSScreen: React.FunctionComponent<LoginInput> = (props) => {
 
     const formParameters: FormParameters = [
         creatFormBase({
-            key: 'username',
+            key: 'email',
             formType: 'email',
             title: "Email",
             validationFn: [
@@ -63,7 +63,7 @@ export const LoginSScreen: React.FunctionComponent<LoginInput> = (props) => {
     return (
         <View style={Styles.container}>
             <Card style={Styles.card}>
-                <Title style={Styles.title}>Autenticate</Title>
+                <Title style={Styles.title}>Access your account</Title>
                 <FormContainerComponent
                     isEditing={false}
                     onSave={(data) => onSave(data as ILoginModel)}

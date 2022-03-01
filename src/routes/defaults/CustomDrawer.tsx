@@ -2,19 +2,29 @@ import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-nav
 import { CommonActions, DrawerActions } from '@react-navigation/native';
 import React from 'react';
 import { Drawer } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
+import { logoutAction } from '~modules/auth/store/auth.action';
 
 /**
  * Drawer component.
  * @param props
  */
 export function CustomDrawerContent(props: DrawerContentComponentProps): React.ReactElement {
-  const click = ((routName: string, active: boolean) => props.navigation.dispatch({
-    ...(active
-      ? DrawerActions.closeDrawer()
-      : CommonActions.navigate(routName)
-    ),
-    target: props.state.key,
-  }))
+
+  const dispatch = useDispatch();
+  const doLogout = () => {
+    dispatch(logoutAction());
+  }
+  const click = ((routName: string, active: boolean) => {
+    if (active) {
+      return;
+    }
+    DrawerActions.closeDrawer();
+    props.navigation.dispatch({
+      ...(CommonActions.navigate(routName)),
+      target: props.state.key,
+    })
+  });
 
   return (
     <DrawerContentScrollView>
@@ -34,6 +44,14 @@ export function CustomDrawerContent(props: DrawerContentComponentProps): React.R
             />
           ))
         }
+      </Drawer.Section>
+      <Drawer.Section>
+        <DrawerItem
+              active={false}
+              label="Logout"
+              drawerIcon=""
+              click={doLogout}
+          />
       </Drawer.Section>
     </DrawerContentScrollView>
   );
