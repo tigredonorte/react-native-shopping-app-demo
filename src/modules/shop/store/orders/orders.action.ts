@@ -8,7 +8,6 @@ import { OrdersItemModel } from './orders.model';
 import { OrdersState } from './orders.state';
 
 const url = `${env.serviceUrl}/orders`;
-const user = 'u1';
 export enum OrderActionType {
     Add = 'AddOrder',
     Fetch = 'FetchOrder',
@@ -19,9 +18,11 @@ export interface IFetchOrder {
     payload: OrdersItemModel[]
 }
 export const FetchOrderAction = () => {
-    return async(dispatch: ThunkDispatch<OrdersState, any, IFetchOrder>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<OrdersState, any, IFetchOrder>, getState: () => any): Promise<void> => {
         try {
-            const resp = await fetch(`${url}/${user}.json`, {
+            const token = getState().Auth?.token;
+            const user = getState().Auth?.user?.id;
+            const resp = await fetch(`${url}/${user}.json?auth=${token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,14 +48,16 @@ export interface IAddOrder {
     order: OrdersItemModel
 }
 export const AddOrderAction = (items: CartItemModel[]) => {
-    return async(dispatch: ThunkDispatch<OrdersState, any, IAddOrder>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<OrdersState, any, IAddOrder>, getState: () => any): Promise<void> => {
         try {
+            const token = getState().Auth?.token;
+            const user = getState().Auth?.user?.id;
             const order = {
                 date: moment.utc().format('YYYY-MM-DD'),
                 cartItems: items,
                 total: items.reduce((acc, it) => acc + it.amount * it.price, 0)
             };
-            const resp = await fetch(`${url}/${user}.json`, {
+            const resp = await fetch(`${url}/${user}.json?auth=${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

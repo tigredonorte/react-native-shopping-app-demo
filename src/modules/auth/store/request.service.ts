@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import env from '~environments';
+import { i18nAuth } from '../i18n';
 
 import { AuthStateName } from './auth.state';
 
@@ -41,16 +42,17 @@ export const requestService = async(post: AuthRequest, errorCallback?: (data: an
         body: JSON.stringify(post.data)
     });
 
+    const response = await resp.json();
     if(resp.ok) {
-        const out = await resp.json();
-        out.userData = userData;
-        return out;
+        response.userData = userData;
+        return response;
     }
 
     if (!errorCallback) {
-        throw new Error(post.errorMessage);
+        const message = response?.error?.errors[0]?.message;
+        const translated = i18nAuth.t(message);
+        throw new Error((message === translated || !translated) ? post.errorMessage : translated);
     }
 
-    const response = await resp.text();
     return errorCallback({ status: resp.status, response })
 }

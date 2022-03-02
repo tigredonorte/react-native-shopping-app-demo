@@ -15,7 +15,7 @@ export const FetchStateError: FunctionComponent<FetchStateErrorInput> = (props) 
         <TText style={Styles.errorText}> {props.errorText} </TText>
         { 
             props.btnText &&
-            <Button mode="contained" onPress={props.fetchDataFn}>
+            <Button mode="outlined" onPress={props.fetchDataFn}>
                 {props.btnText}
             </Button>
         }

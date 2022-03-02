@@ -13,6 +13,7 @@ import {
 } from '~components/Form';
 
 import { ToggleLoginSignup } from '../components/ToggleLoginSignup.component';
+import { i18nAuth } from '../i18n';
 import { AuthRoutes, AuthStackType } from '../routes/Auth.routes.types';
 import { LoginAction } from '../store/auth.action';
 import { ILoginModel } from '../store/auth.model';
@@ -33,8 +34,8 @@ export const LoginSScreen: React.FunctionComponent<LoginInput> = (props) => {
             await dispatch(LoginAction(data));
         } catch (error: any) {
             Alert.alert('Authentication Error', error.message, [{ text: 'Ok' }]);
+            setIsSaving(false);
         }
-        setIsSaving(false);
     }, [ setIsSaving ]);
 
     const formParameters: FormParameters = [
@@ -63,12 +64,12 @@ export const LoginSScreen: React.FunctionComponent<LoginInput> = (props) => {
     return (
         <View style={Styles.container}>
             <Card style={Styles.card}>
-                <Title style={Styles.title}>Access your account</Title>
+                <Title style={Styles.title}>{i18nAuth.t('login.title')}</Title>
                 <FormContainerComponent
                     isEditing={false}
                     onSave={(data) => onSave(data as ILoginModel)}
                     formParameters={formParameters}
-                    isSaving={isSaving}
+                    isSaving={false}
                     buttonText="Login"
                 ></FormContainerComponent>
                 <ToggleLoginSignup goToScreen='signup' navigation={props.navigation}/>

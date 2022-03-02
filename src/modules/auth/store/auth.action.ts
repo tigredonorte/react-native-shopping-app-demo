@@ -1,17 +1,15 @@
 import * as SecureStore from 'expo-secure-store';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { ILoginModel, ISignupModel } from './auth.model';
+import { AuthUserModel, ILoginModel, ISignupModel } from './auth.model';
 import { AuthState as State, AuthStateName } from './auth.state';
 import { requestService } from './request.service';
 
 export enum AuthActionType {
+    Authenticate = 'AuthenticateAction',
     Logout = 'LogoutAction',
-    Login = 'LoginAction',
     Recover = 'RecoverAction',
     VerifyResetCode = 'VerifyResetCodeAction',
-    SetToken = 'SetTokenAction',
-    Signup = 'SignupAction',
     ResetPassword = 'ResetPasswordAction',
     ChangeEmail = 'ChangeEmailAction',
     ChangePassword = 'ChangePasswordAction',
@@ -22,22 +20,68 @@ export enum AuthActionType {
     VerifyEmail = 'VerifyEmailAction',
 }
 
-export interface ISetToken { type: AuthActionType.SetToken, payload: string };
-export const SetTokenAction = () => {
-    return async(dispatch: ThunkDispatch<State, any, ISetToken>): Promise<void> => {
+const saveToStorage = async(data: any) => {
+    data.expirationDate = new Date(new Date().getTime() + (parseInt(data.expiresIn) * 1000)).toISOString();
+    await SecureStore.setItemAsync(AuthStateName, JSON.stringify(data));
+}
+
+const getFromStorage = async() => JSON.parse(await SecureStore.getItemAsync(AuthStateName) || '');
+const deleteFromStorage =async() => await SecureStore.deleteItemAsync(AuthStateName);
+
+let timer: NodeJS.Timeout;
+const setLogoutTimer = (expirationTime: number) => {
+    return async(dispatch: ThunkDispatch<State, any, ILogout>): Promise<void> => {
+        if (isNaN(expirationTime)) {
+            return;
+        }
+        timer = setTimeout(() => {
+            dispatch(logoutAction());
+        }, expirationTime);
+    }
+}
+const clearLogoutTimer = () => timer ?? clearTimeout(timer);
+
+export interface IAuthenticate { 
+    type: AuthActionType.Authenticate;
+    user: AuthUserModel;
+    token: string;
+};
+
+const Authenticate = (payload: { email: string; displayName: string; localId: string; idToken: string }, expiresIn: number ) => {
+    return async(dispatch: ThunkDispatch<State, any, IAuthenticate | ILogout>): Promise<void> => {
         try {
-            const data = await SecureStore.getItemAsync(AuthStateName) || '';
-            const userToken = JSON.parse(data);
-            dispatch({ type: AuthActionType.SetToken, payload: userToken.idToken });
+            dispatch(setLogoutTimer(expiresIn));
+            const user = { email: payload.email, name: payload.displayName, id: payload.localId };
+            dispatch({ type: AuthActionType.Authenticate, user, token: payload.idToken });
         } catch (error) {
-            dispatch({ type: AuthActionType.SetToken, payload: '' });
+            throw error;
+        }
+    }
+}
+
+export const SetTokenAction = () => {
+    return async(dispatch: ThunkDispatch<State, any, IAuthenticate | ILogout>): Promise<void> => {
+        try {
+            const userToken = await getFromStorage();
+            if (!userToken) {
+                throw new Error('No token found!');
+            }
+
+            const expirationDate = new Date(userToken.expirationDate);
+            if (expirationDate <= new Date() ) {
+                return dispatch(logoutAction());
+            }
+
+            const expirationTime = expirationDate.getTime() - new Date().getTime();
+            dispatch(Authenticate(userToken, expirationTime));
+        } catch (error) {
+            dispatch({ type: AuthActionType.Authenticate, user: { id: '', email: '', name: '' }, token: '' });
         }
     };
 }
 
-export interface ISignup { type: AuthActionType.Signup, token: string };
 export const SignupAction = (payload: ISignupModel) => {
-    return async(dispatch: ThunkDispatch<State, any, ISignup>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<State, any, IAuthenticate>): Promise<void> => {
         try {
             const resData = await requestService({
                 url: 'signUp',
@@ -45,22 +89,17 @@ export const SignupAction = (payload: ISignupModel) => {
                 errorMessage: 'Unable to perform Signup!',
                 needToken: false
             });
-
-            console.log(resData);
+            await saveToStorage(resData);
             
-            await SecureStore.setItemAsync(AuthStateName, JSON.stringify(resData));
-            
-            dispatch({ type: AuthActionType.Signup, token: resData.idToken });
-
+            dispatch(Authenticate(resData, parseInt(resData.expiresIn) * 1000));
         } catch (error) {
             throw error;
         }
     };
 }
 
-export interface ILogin { type: AuthActionType.Login, payload: ILoginModel }
 export const LoginAction = (payload: ILoginModel) => {
-    return async(dispatch: ThunkDispatch<State, any, ILogin>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<State, any, IAuthenticate>): Promise<void> => {
         try {        
             const resData = await requestService({
                 url: 'signInWithPassword',
@@ -69,9 +108,8 @@ export const LoginAction = (payload: ILoginModel) => {
                 needToken: false
             });
 
-            await SecureStore.setItemAsync(AuthStateName, JSON.stringify(resData));
-
-            dispatch({ type: AuthActionType.Login, payload });
+            await saveToStorage(resData);
+            dispatch(Authenticate(resData, parseInt(resData.expiresIn) * 1000));
         } catch (error) {
             throw error;
         }
@@ -83,7 +121,8 @@ export interface ILogout { type: AuthActionType.Logout };
 export const logoutAction = () => {
     return async(dispatch: ThunkDispatch<State, any, ILogout>): Promise<void> => {
         try {
-            await SecureStore.deleteItemAsync(AuthStateName);
+            clearLogoutTimer();
+            await deleteFromStorage();
             dispatch({ type: AuthActionType.Logout });
         } catch (error) {
             throw error;

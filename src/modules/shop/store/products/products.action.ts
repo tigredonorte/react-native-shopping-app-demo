@@ -11,11 +11,13 @@ export enum ProductActionType {
     Edit = 'EditProduct',
 }
 
-export interface IFetchProduct { type: ProductActionType.Fetch, payload: ProductModel[] }
+export interface IFetchProduct { type: ProductActionType.Fetch; payload: ProductModel[]; userId: string; }
 export const FetchProductAction = () => {
-    return async(dispatch: ThunkDispatch<ProductsState, any, IFetchProduct>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<ProductsState, any, IFetchProduct>, getState: () => any): Promise<void> => {
         try {
-            const resp = await fetch(`${env.serviceUrl}/products.json`, {
+            const userId = getState()?.Auth?.user?.id;
+            const token = getState()?.Auth?.token;
+            const resp = await fetch(`${env.serviceUrl}/products.json?auth=${token}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -29,19 +31,21 @@ export const FetchProductAction = () => {
             const resData = await resp.json();
             const payload = values(mapObjIndexed((product: ProductModel, id: string) => ({ ...product, id }), resData));
     
-            dispatch({ type: ProductActionType.Fetch, payload });
+            dispatch({ type: ProductActionType.Fetch, payload, userId });
         } catch (error) {
             throw error;
         }
     };
 }
 
-        
-export interface IAddProduct { type: ProductActionType.Add, payload: ProductModel }
+export interface IAddProduct { type: ProductActionType.Add; payload: ProductModel; }
 export const AddProductAction = (product: ProductModel) => {
-    return async(dispatch: ThunkDispatch<ProductsState, any, IAddProduct>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<ProductsState, any, IAddProduct>, getState: () => any): Promise<void> => {
         try {
-            const resp = await fetch(`${env.serviceUrl}/products.json`, {
+            const token = getState()?.Auth?.token;
+            const userId = getState()?.Auth?.user?.id;
+            product.ownerId = userId;
+            const resp = await fetch(`${env.serviceUrl}/products.json?auth=${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -49,12 +53,12 @@ export const AddProductAction = (product: ProductModel) => {
                 body: JSON.stringify(product)
             });
             
+            const resData = await resp.json();
             if(!resp.ok) {
-                throw new Error('Error adding product' + JSON.stringify(product));
+                throw new Error('Error adding product');
             }
     
-            const resData = await resp.json();
-            dispatch({ type: ProductActionType.Add, payload: { ...product, id: resData.name, ownerId: 'u1' } });
+            dispatch({ type: ProductActionType.Add, payload: { ...product, id: resData.name } });
     
         } catch (error) {
             throw error;
@@ -64,9 +68,10 @@ export const AddProductAction = (product: ProductModel) => {
 
 export interface IEditProduct { type: ProductActionType.Edit, payload: ProductModel, id: string; }
 export const EditProductAction = (id: string, product: ProductModel) => {
-    return async(dispatch: ThunkDispatch<ProductsState, any, IEditProduct>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<ProductsState, any, IEditProduct>, getState: () => any): Promise<void> => {
         try {
-            const resp = await fetch(`${env.serviceUrl}/products/${id}.json`, {
+            const token = getState()?.Auth?.token;
+            const resp = await fetch(`${env.serviceUrl}/products/${id}.json?auth=${token}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -89,9 +94,10 @@ export const EditProductAction = (id: string, product: ProductModel) => {
 
 export interface IRemoveProduct { type: ProductActionType.Remove, id: string; }
 export const RemoveProductAction = (id: string) => {
-    return async(dispatch: ThunkDispatch<ProductsState, any, IRemoveProduct>): Promise<void> => {
+    return async(dispatch: ThunkDispatch<ProductsState, any, IRemoveProduct>, getState: () => any): Promise<void> => {
         try {
-            const resp = await fetch(`${env.serviceUrl}/products/${id}.json`, {
+            const token = getState()?.Auth?.token;
+            const resp = await fetch(`${env.serviceUrl}/products/${id}.json?auth=${token}`, {
                 method: 'DELETE'
             });
 

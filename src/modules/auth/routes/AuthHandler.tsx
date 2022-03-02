@@ -13,7 +13,6 @@ export const AuthHandler: React.FC<any> = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async() => {
       try {
         if (!token) {
@@ -21,7 +20,6 @@ export const AuthHandler: React.FC<any> = (props) => {
         }
       } catch (e) {
         console.log('catch error!');
-        // Restoring token failed
       }
     };
     bootstrapAsync();

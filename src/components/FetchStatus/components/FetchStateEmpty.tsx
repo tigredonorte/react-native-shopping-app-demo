@@ -21,7 +21,7 @@ export const FetchStateEmpty: FunctionComponent<FetchStateEmptyInput> = (props) 
         }
         { 
             props.emptyBtnText &&
-            <Button mode="contained" onPress={props.onEmptyData}>
+            <Button mode="outlined" onPress={props.onEmptyData}>
                 {props.emptyBtnText}
             </Button>
         }

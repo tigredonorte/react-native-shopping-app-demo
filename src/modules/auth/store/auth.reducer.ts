@@ -1,4 +1,3 @@
-import { initialState } from '~modules/shop/store/products';
 import { GenericReducer } from '~utils/reduxUtilities';
 
 import * as Action from './auth.action';
@@ -13,27 +12,9 @@ export const AuthReducer = GenericReducer<AuthState, any>(authInitialState, {
             isSignout: true,
         }
     }),
-    [Action.AuthActionType.SetToken]: (state, action: Action.ISetToken): AuthState => ({
+    [Action.AuthActionType.Authenticate]: (state, action: Action.IAuthenticate): AuthState => ({
         ...state,
-        token: action.payload,
-        status: {
-            ...state.status,
-            isSignout: false,
-            isLoading: false,
-        }
-    }),
-    [Action.AuthActionType.Signup]: (state, action: Action.ISignup): AuthState => ({
-        ...state,
-        // user: action.user,
-        token: action.token,
-        status: {
-            ...state.status, 
-            isLoading: false,
-        }
-    }),
-    [Action.AuthActionType.Login]: (state, action: Action.ISignup): AuthState => ({
-        ...state,
-        // user: action.user,
+        user: action.user,
         token: action.token,
         status: {
             ...state.status, 

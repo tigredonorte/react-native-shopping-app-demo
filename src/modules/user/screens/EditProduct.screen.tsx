@@ -14,10 +14,10 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
     const [ isSaving, setIsSaving ] = useState(false);
     const [ errorMessage, setErrorMessage ] = useState<string>();
     const isEditing = !!props.route.params?.id;
-    const userProduct = useSelector(getUserProductById(props.route.params?.id));
+    const userProduct = useSelector(getUserProductById(props.route.params?.id ?? ''));
     const dispatch = useDispatch();
     useEffect(() => {
-        props.navigation.setOptions({ title: isEditing ? `Edit ${props.route.params.title}` : 'Add Product' });
+        props.navigation.setOptions({ title: isEditing ? `Edit ${props.route.params?.title ?? ''}` : 'Add Product' });
     }, []);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
             setErrorMessage(undefined);
             setIsSaving(true);
             isEditing
-                ? await dispatch(EditProductAction(props.route.params.id, data))
+                ? await dispatch(EditProductAction(props?.route?.params?.id ?? '', data))
                 : await dispatch(AddProductAction(data));
             props.navigation.goBack();
         } catch (error: any) {
@@ -99,6 +99,7 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
             onSave={onSave}
             formParameters={formParameters}
             isSaving={isSaving}
+            buttonText="Save"
         />
     );
 };

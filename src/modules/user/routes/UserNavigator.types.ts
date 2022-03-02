@@ -5,5 +5,5 @@ export enum UserRoutes {
 
 export type UserStackType = {
     [UserRoutes.ListProducts]: undefined;
-    [UserRoutes.EditProduct]: { id: string; title: string; };
+    [UserRoutes.EditProduct]: { id: string; title: string; } | undefined;
 };

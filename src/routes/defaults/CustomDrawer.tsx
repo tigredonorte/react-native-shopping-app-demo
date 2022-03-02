@@ -2,6 +2,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView } from '@react-nav
 import { CommonActions, DrawerActions } from '@react-navigation/native';
 import React from 'react';
 import { Drawer } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
 import { logoutAction } from '~modules/auth/store/auth.action';
 
@@ -12,9 +13,7 @@ import { logoutAction } from '~modules/auth/store/auth.action';
 export function CustomDrawerContent(props: DrawerContentComponentProps): React.ReactElement {
 
   const dispatch = useDispatch();
-  const doLogout = () => {
-    dispatch(logoutAction());
-  }
+  const doLogout = () => dispatch(logoutAction());
   const click = ((routName: string, active: boolean) => {
     if (active) {
       return;
@@ -27,33 +26,33 @@ export function CustomDrawerContent(props: DrawerContentComponentProps): React.R
   });
 
   return (
-    <DrawerContentScrollView>
-      <Drawer.Section>
-        {
-          props.state.routes.map((route: any, i: number) => (
-            <DrawerItem
-              key={route.key}
-              active={i === props.state.index}
-              label={
-                props.descriptors[route.key].options.drawerLabel ??
-                props.descriptors[route.key].options.title ??
-                route.name
-              }
-              drawerIcon={props.descriptors[route.key].options.drawerIcon}
-              click={() => click(route.name, i === props.state.index)}
+      <DrawerContentScrollView>
+        <Drawer.Section>
+          {
+            props.state.routes.map((route: any, i: number) => (
+              <DrawerItem
+                key={route.key}
+                active={i === props.state.index}
+                label={
+                  props.descriptors[route.key].options.drawerLabel ??
+                  props.descriptors[route.key].options.title ??
+                  route.name
+                }
+                drawerIcon={props.descriptors[route.key].options.drawerIcon}
+                click={() => click(route.name, i === props.state.index)}
+              />
+            ))
+          }
+        </Drawer.Section>
+        <Drawer.Section>
+          <DrawerItem
+                active={false}
+                label="Logout"
+                drawerIcon=""
+                click={doLogout}
             />
-          ))
-        }
-      </Drawer.Section>
-      <Drawer.Section>
-        <DrawerItem
-              active={false}
-              label="Logout"
-              drawerIcon=""
-              click={doLogout}
-          />
-      </Drawer.Section>
-    </DrawerContentScrollView>
+        </Drawer.Section>
+      </DrawerContentScrollView>
   );
 }
 

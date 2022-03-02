@@ -13,16 +13,16 @@ export const ProductsReducer = GenericReducer<ProductsState, any>(initialState, 
     [Action.Fetch]: (state, action: IFetchProduct) => ({
         ...state,
         availableProducts: action.payload,
-        userProducts: action.payload.filter(product => product.ownerId === 'u1')
+        userProducts: action.payload.filter(product => product.ownerId === action.userId)
     }),
     [Action.Add]: (state, action: IAddProduct) => ({
         ...state,
         userProducts: [
-            { ...action.payload, ownerId: 'u1' },
+            { ...action.payload },
             ...state.userProducts,
         ],
         availableProducts: [
-            { ...action.payload, ownerId: 'u1' },
+            { ...action.payload },
             ...state.availableProducts,
         ]
     }),
