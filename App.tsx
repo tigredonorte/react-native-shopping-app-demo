@@ -1,8 +1,10 @@
 import React from 'react';
 import { enableScreens } from 'react-native-screens';
 import { Provider as ReduxProvider } from 'react-redux';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import ReduxThunk from 'redux-thunk';
+import env from '~environments';
 import { AuthReducer } from '~modules/auth/store/auth.reducer';
 import { AuthStateName } from '~modules/auth/store/auth.state';
 import { CartReducer } from '~modules/shop/store/cart/cart.reducer';
@@ -22,8 +24,10 @@ const reducers = combineReducers({
   [AuthStateName]: AuthReducer,
 });
 
-const store = createStore(reducers, applyMiddleware(ReduxThunk));
-// const store = createStore(reducers, !env.production? composeWithDevTools(): undefined);
+const store = createStore(reducers, env.production
+  ? applyMiddleware(ReduxThunk)
+  : composeWithDevTools(applyMiddleware(ReduxThunk))
+);
 
 /**
  * It's important on huge app to improve performance

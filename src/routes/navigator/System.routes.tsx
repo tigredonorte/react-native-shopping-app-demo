@@ -17,9 +17,9 @@ const getDrawerOptions = (title: string, icon: string) => ({
   drawerIcon: ({ size, color }: any): React.ReactNode => (<IconButton icon={icon} size={size} color={color} />),
 });
 
-
 export const SystemNavigator = () => (
   <Drawer.Navigator
+    useLegacyImplementation={false}
     screenOptions={{ headerShown: false }}
     drawerContent={(props): React.ReactElement => <CustomDrawerContent {...props} />}
     initialRouteName={ProductRoutes.Home}

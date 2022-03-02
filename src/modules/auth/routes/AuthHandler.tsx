@@ -1,15 +1,13 @@
-import React, { ReactElement, ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SplashScreen } from '~styles/themeInitializer';
-import * as SecureStore from 'expo-secure-store';
+
 import { SetTokenAction } from '../store/auth.action';
 import { getAuthStatus, getAuthToken } from '../store/auth.selectors';
 import { AuthNavigator } from './Auth.routes';
-import { AuthStateName } from '../store/auth.state';
 
-export const AuthHandler: React.FC<{ children: ReactElement }> = (props) => {
+export const AuthHandler: React.FC<any> = (props) => {
 
-  // const dispatch = useDispatch();
   const state = useSelector(getAuthStatus);
   const token = useSelector(getAuthToken);
   const dispatch = useDispatch();
