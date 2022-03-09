@@ -47,6 +47,10 @@ export const AddProductAction = (product: ProductModel) => {
             const userId = getState()?.Auth?.user?.id;
             product.ownerToken = await NotificationService.getUserToken();
             product.ownerId = userId;
+            if (typeof product.price === 'string') {
+                const [ a, b ] = parseFloat(product.price).toFixed(2).split('.');
+                product.price = parseInt(a) + parseInt(b) / 100;
+            }
             const resp = await fetch(`${env.serviceUrl}/products.json?auth=${token}`, {
                 method: 'POST',
                 headers: {

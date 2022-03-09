@@ -39,6 +39,7 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
 
     const onSave = useCallback(async(data: any) => {
         try {
+            console.log('@@##', { data });
             setErrorMessage(undefined);
             setIsSaving(true);
             isEditing
