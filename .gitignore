@@ -11,6 +11,7 @@ npm-debug.*
 web-build/
 yarn-error.log
 /src/environments/private-data.ts
+google-services.json
 
 # macOS
 .DS_Store

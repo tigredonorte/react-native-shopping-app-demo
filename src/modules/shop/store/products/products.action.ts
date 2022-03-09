@@ -3,6 +3,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import env from '~environments';
 import { ProductsState } from './products.state';
 import { ProductModel } from './product.model';
+import { NotificationService } from '~utils/notification.service';
 
 export enum ProductActionType {
     Fetch = 'FetchProduct',
@@ -44,6 +45,7 @@ export const AddProductAction = (product: ProductModel) => {
         try {
             const token = getState()?.Auth?.token;
             const userId = getState()?.Auth?.user?.id;
+            product.ownerToken = await NotificationService.getUserToken();
             product.ownerId = userId;
             const resp = await fetch(`${env.serviceUrl}/products.json?auth=${token}`, {
                 method: 'POST',
@@ -52,7 +54,6 @@ export const AddProductAction = (product: ProductModel) => {
                 },
                 body: JSON.stringify(product)
             });
-            
             const resData = await resp.json();
             if(!resp.ok) {
                 throw new Error('Error adding product');

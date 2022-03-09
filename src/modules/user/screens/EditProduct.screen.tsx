@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { creatFormBase, FormContainerComponent, FormParameters, ValidateMaxLength, ValidateMaxValue, ValidateMinLength, ValidateMinValue, ValidateRequired, ValidateUrl } from '~components/Form';
 import { AddProductAction, EditProductAction, getUserProductById } from '~modules/shop/store/products';
+import { NotificationService } from '~utils/notification.service';
 
 import { UserRoutes, UserStackType } from '../routes';
 
@@ -17,6 +18,16 @@ export const EditProductScreen: FunctionComponent<EditProductInput> = (props) =>
     const userProduct = useSelector(getUserProductById(props.route.params?.id ?? ''));
     const dispatch = useDispatch();
     useEffect(() => {
+        const init = async() => {
+            if (!await NotificationService.askForPermission()) {
+                Alert.alert(
+                    'Push notifications error', 
+                    "If you not allow us to perform push notifications, you'll never know when someone buy your products", 
+                    [{ text: 'ok' }]
+                );
+            }
+        }
+        init();
         props.navigation.setOptions({ title: isEditing ? `Edit ${props.route.params?.title ?? ''}` : 'Add Product' });
     }, []);
 

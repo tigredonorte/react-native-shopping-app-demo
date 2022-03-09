@@ -2,6 +2,7 @@ import moment from 'moment';
 import { mapObjIndexed, values } from 'ramda';
 import { ThunkDispatch } from 'redux-thunk';
 import env from '~environments';
+import { NotificationService } from '~utils/notification.service';
 
 import { CartItemModel } from '../cart/cart.model';
 import { OrdersItemModel } from './orders.model';
@@ -70,7 +71,34 @@ export const AddOrderAction = (items: CartItemModel[]) => {
             }
     
             const resData = await resp.json();
-    
+            const users: {[s: string]: { products: string[], total: number }} = {};
+            items.forEach(it => {
+                if (!it.ownerToken) {
+                    return;
+                }
+                if (!users[it.ownerToken]) {
+                    users[it.ownerToken] = {
+                        products: [],
+                        total: 0
+                    };
+                }
+                users[it.ownerToken] = {
+                    products: [
+                        ...users[it.ownerToken].products,
+                        it.title
+                    ],
+                    total: users[it.ownerToken].total + it.sum
+                };
+            });
+
+            for ( const token in users ) {
+                NotificationService.sendRemoteNotification({
+                    to: token,
+                    title: `You sold  R$${users[token].total}`,
+                    body: `The following products were sold: ${users[token].products.join(', ')}`
+                });
+            } 
+
             dispatch({ 
                 type: OrderActionType.Add, 
                 order: { ...order, id: resData.name } 

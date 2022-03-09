@@ -5,6 +5,7 @@ export interface ProductModel {
     imageUrl: string;
     description: string;
     price: number;
+    ownerToken?: string;
 }
 
 export interface BasicProduct { 

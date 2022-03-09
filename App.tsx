@@ -16,6 +16,7 @@ import { productStateName } from '~modules/shop/store/products/products.state';
 import { Routes } from '~routes/routes';
 import { theme } from '~styles/theme';
 import { ThemeInitilizer } from '~styles/themeInitializer';
+import { NotificationService } from '~utils/notification.service';
 
 const reducers = combineReducers({
   [productStateName]: ProductsReducer,
@@ -33,6 +34,7 @@ const store = createStore(reducers, env.production
  * It's important on huge app to improve performance
  */
 enableScreens();
+NotificationService.enableOnForeground();
 
 export default function App() {
   return (

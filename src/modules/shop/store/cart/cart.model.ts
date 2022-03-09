@@ -4,4 +4,5 @@ export interface CartItemModel {
     price: number;
     amount: number;
     sum: number;
+    ownerToken?: string;
 }

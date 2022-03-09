@@ -1,6 +1,6 @@
 import { GenericReducer } from '~utils/reduxUtilities';
-import { ProductActionType, RemoveProductAction } from '../products';
 
+import { IRemoveProduct, ProductActionType } from '../products';
 import { AddToCartAction, CartActionType, ClearCartAction, RemoveFromCartAction } from './cart.action';
 import { CartState as State, initialState } from './cart.state';
 
@@ -15,7 +15,8 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
             title: action.product.title,
             price: action.product.price,
             amount: 1,
-            sum: action.product.price
+            sum: action.product.price,
+            ownerToken: action.product.ownerToken
         }
 
         return {
@@ -56,7 +57,7 @@ export const CartReducer = GenericReducer<State, any>(initialState, {
         };
     },
 
-    [ProductActionType.Remove]: (state, action: ReturnType<typeof RemoveProductAction>) => {
+    [ProductActionType.Remove]: (state, action: IRemoveProduct) => {
         if (!state.items[action.id]) {
             return state;
         }

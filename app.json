@@ -20,6 +20,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.thomfilg.my_places_mobile",
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
